@@ -28,14 +28,21 @@ console.log(invertirPalabras("Miguel Angel"));
 // Nota: indexOf(), y luego intentarlo con includes() 
 
 const contarPalabrasRepetidas = (str,strSearch) =>{
+    // Como estamos contando una palabra las veces que se repite 
+    // si es que esta cadena que buscamos se repite de ahí el -1,sino encunetra nada retorna 0
     let cont = 0;
-    for(let i =0; i < str.length; i++){
-        if(str.includes(strSearch)){
-            cont++;
-        }
+    let index = str.indexOf(strSearch);
+    while(index != -1){
+        cont++;
+        index = str.indexOf(strSearch,index + 1);
     }
     return cont;
 
 }
 
 console.log(contarPalabrasRepetidas("estoy en el parque porque estoy aburrido","estoy"));
+
+
+// 3) Realizar una función javascript que elimine una subcadena de texto de un texto dado 
+// Ej:eliminarSubcadena("xyz1, xyz2, xyz3, xyz4 y xyz5", "xyz") devolverá "1, 2, 3, 4 y 5” . 
+// Nota: replace()
