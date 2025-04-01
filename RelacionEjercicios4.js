@@ -9,7 +9,8 @@ function invertirPalabras(str){
     /*recorremos la cadena con un fori para ir invirtiendo las palabras*/
     for (let i = 0;i < reversedStr.length; i++){  
         // nos creamos una variable con la cual vamos a invertir la palabra,
-        // necesitamos el join para unirlo
+        // necesitamos el join para unirlo y usamos el spread operator para
+        // crear una copia del array y convertirlo con reverse
         let reverse = [...reversedStr[i]].reverse().join("");
         // añadimos la palabra invertida al array
         reversedWords.push(reverse);
@@ -19,4 +20,6 @@ function invertirPalabras(str){
     return reversedWords.reverse().join(" ");
 }
 console.log(invertirPalabras("Miguel Angel"));
+
+
 
