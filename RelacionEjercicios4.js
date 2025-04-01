@@ -22,4 +22,20 @@ function invertirPalabras(str){
 console.log(invertirPalabras("Miguel Angel"));
 
 
+// 2)  Realizar una función javascript con notación “Arrow function” para contar el número de veces que se 
+// repite una subcadena en una cadena de  texto  
+// Ej:  contarVecesCadenaEnTexto(“estoy”, "estoy en el parque porque estoy aburrido") devolverá 2.  
+// Nota: indexOf(), y luego intentarlo con includes() 
 
+const contarPalabrasRepetidas = (str,strSearch) =>{
+    let cont = 0;
+    for(let i =0; i < str.length; i++){
+        if(str.includes(strSearch)){
+            cont++;
+        }
+    }
+    return cont;
+
+}
+
+console.log(contarPalabrasRepetidas("estoy en el parque porque estoy aburrido","estoy"));
