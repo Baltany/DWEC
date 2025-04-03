@@ -155,4 +155,94 @@ const devolverOrden=(array)=>{
 let arrayOrden = [3,5,3,8,6];
 console.log(devolverOrden(arrayOrden));
 
+// 10) Realizar en javascript una clase llamada Película con los siguientes datos: id de la película, titulo, 
+// director, año de estreno, país o países de origen, género y calificación. Hay que comprobar lo siguiente:
+//  -  que el id tenga 9 caracteres,
+//  los primeros 2 sean letras y los 7 restantes números. -  que el título no supere los 100 caracteres.  
+// -  que el año de estreno sea un número entero de 4 dígitos. 
+//  -  que el país o países sea introducidos en forma de array. 
+//  - que el género introducido esté entre los siguientes géneros válidos. los géneros sean introducidos en 
+// forma de arreglo. - Valida que los géneros introducidos estén dentro de los géneros aceptados: Action, Adult, Adventure, Animation, Biography, Comedy, Crime, Documentary ,Drama, Family, Fantasy, Film  Noir, Game-Show, History, Horror, Musical, Music, Mystery, News, Reality-TV, Romance, Sci-Fi, Short, Sport, Talk-Show, Thriller, War, Western*. 
+// - Crea un método estático que devuelva los géneros 
+// aceptados*.  
+// Crear un método que devuelva toda la ficha técnica de la película.  - A partir de un array con la información de 3 películas genera 3 instancias de la clase de forma 
+// automatizada e imprime la ficha técnica de cada película. 
 
+class Pelicula{
+    constructor(id,titulo,director,estreno,pais,genero,calificacion){
+        this.validarId(id);
+        this.validarTitulo(titulo);
+        this.validarAñoEstreno(estreno);
+        this.validarPais(pais);
+        this.validarGenero(genero);
+        this.validarCalificacion(calificacion);
+        
+        // Una vez ya validamos los datos ahora si se crea el objeto Pelicula
+        this.id = id;
+        this.titulo = titulo;
+        this.director = director;
+        this.estreno = estreno;
+        this.pais = pais;
+        this.genero = genero;
+        this.calificacion = calificacion;
+    }
+
+    validarId(id){
+
+    }
+
+    validarGenero(genero){
+        let generosValidos = ["Action","Adult",
+            "Adventure", "Animation", "Biography", "Comedy", 
+            "Crime","Documentary" ,"Drama", "Family", "Fantasy", 
+            "Film  Noir", "Game-Show", "History", "Horror", "Musical",
+            "Music", "Mystery", "News", "Reality-TV", "Romance", "Sci-Fi", 
+            "Short", "Sport", "Talk-Show", "Thriller", "War", "Western"];
+
+        if(!Array.isArray(genero) || genero.length === 0){
+            throw new Error("El género debe ser un array de géneros");
+        }
+
+
+        for(let genero = 0;genero < generosValidos.length;genero++){
+            if(!generosValidos.includes(genero)){
+                throw new Error("El genero no se encuentra en la lista");
+            }
+        }
+        
+
+    }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+// 10) Crear el siguiente ejercicio de herencia en Orientación a objetos en javascript. 
+// Crear la clase habitación con los siguientes atributos: - número : número de habitación - capacidad: número de personas que la habitarán (1,2,3,4,5) - servicios: número de servicios disponibles en la habitación 
+// Crear los siguientes métodos: - 
+// calcularPrecio(capacidad,servicios) que calcule el precio de cada habitación, sabiendo que 
+// por cada persona se pagarían 24 € y adicionalmente por cada servicio 3€ 
+// Crear la clase habitacionHotel que calcule el precio de una habitación en un hotel determinado, que 
+// herede de habitación los atributos capacidad y servicios y que además contenga: - 
+// director: director del hotel - - - 
+// categoría: número de estrellas del hotel 
+// numHabsEstandar: número habitaciones estándar del hotel, sabiendo que estas habitaciones 
+// tienen capacidad para 2 personas y con 2 servicios básicos. 
+// numHabsSuite: número de habitaciones suite del hotel, sabiendo que estas habitaciones 
+// tienen capacidad para 2 personas con los 5 servicios básicos. 
+// Crear los siguientes métodos: - 
+// calcularPrecio(capacidad,servicios,categoría) que calcule el precio de esa habitación en ese 
+// hotel concreto sabiendo que además del precio de la habitación por capacidad y servicios se 
+// incrementará un 5 % por cada estrella a partir de la primera, es decir, en un hotel de 2 estrellas 
+// el precio sería el de la habitación + 10% de ese precio. - 
+// calcularRecaudacionHotel que calcule el total que recaudaría el hotel si tuviese todas las 
+// habitaciones estándar y suites ocupadas
