@@ -103,4 +103,16 @@ function contarVocales(str){
 
 }
 
-console.log(contarVocales("Hola Mundo")); 
+console.log(contarVocales("Hola Mundo"));
+
+
+// 7) Realizar una función javascript con notación “Arrow function” que dado un array como parámetro, 
+// devuelva un array con el mayor y el menor número encontrados en el array pasado como parámetro. 
+
+
+const devolverMayorMenor=(numeros)=>{
+    // importante poner el spread ,sino nos devuelve NaN porque la funcion max y min no acepta arrays
+    return "El numero menor es: " + Math.min(...numeros) + " y el numero mayor es: " + Math.max(...numeros);
+}
+let arrayNumeros = [1,9,10,456,1,23];
+console.log(devolverMayorMenor(arrayNumeros));
