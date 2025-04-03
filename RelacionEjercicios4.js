@@ -46,3 +46,11 @@ console.log(contarPalabrasRepetidas("estoy en el parque porque estoy aburrido","
 // 3) Realizar una función javascript que elimine una subcadena de texto de un texto dado 
 // Ej:eliminarSubcadena("xyz1, xyz2, xyz3, xyz4 y xyz5", "xyz") devolverá "1, 2, 3, 4 y 5” . 
 // Nota: replace()
+let str = "xyz1, xyz2, xyz3, xyz4 y xyz5";
+//la g en el regex lo que hace es que busque todas las coincidencias consecutivas
+let regex = /xyz/g;
+function eliminarSubcadena(str,subCadena){
+    return str.replace(subCadena,"");
+}
+console.log(eliminarSubcadena(str,regex));
+
