@@ -116,3 +116,23 @@ const devolverMayorMenor=(numeros)=>{
 }
 let arrayNumeros = [1,9,10,456,1,23];
 console.log(devolverMayorMenor(arrayNumeros));
+
+// 8) Realizar una función que al pasarle un array de números como parámetro,  devuelva un objeto con 2 
+// arrays,  
+// en el primero almacena los números pares y en el segundo los impares, pe. 
+// miFuncion([1,2,3,4,5,6,7,8,9,0]) devolverá {pares: [2,4,6,8,0], impares: [1,3,5,7,9]}.
+
+const devolverParesImpares=(arrayX)=>{
+    let pares = [];
+    let impares = [];
+    arrayX.forEach(element => {
+        if(element % 2 == 0){
+            pares.push(element);
+        }else{
+            impares.push(element);
+        }
+    });
+    return "Array pares: " + pares + " y array impares:" + impares;
+}
+let arrayParesImpares = [1,2,3,4,5,6,7,8,9,0];
+console.log(devolverParesImpares(arrayParesImpares));
