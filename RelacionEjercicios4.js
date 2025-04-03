@@ -54,3 +54,24 @@ function eliminarSubcadena(str,subCadena){
 }
 console.log(eliminarSubcadena(str,regex));
 
+
+
+// 4) Realizar una  función javascript que reciba un número y compruebe si es capicúa o no
+function esCapicua(num){
+    // Importante pasar los numeros a cadena para poder darle la vuelta
+    // y compararlos, si no lo hacemos no nos funcionara
+    let strNum = num.toString();
+    //Importante suar split para separarlos,reverse para darle la vuelta y join para unirlos de nuevo
+    if (strNum.split('').reverse().join('') === strNum){
+        return true;
+    } else{
+        return false;
+    }
+}
+
+console.log(esCapicua(12321)); // true
+console.log(esCapicua(12345)); // false
+
+
+// 5) Realizar una función javascript que dada una fecha, devuelva cuantos años han pasado hasta la fecha actual 
+
