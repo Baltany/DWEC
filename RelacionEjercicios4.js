@@ -75,3 +75,32 @@ console.log(esCapicua(12345)); // false
 
 // 5) Realizar una función javascript que dada una fecha, devuelva cuantos años han pasado hasta la fecha actual 
 
+function calcularEdad(fecha){
+    let fechaActual = new Date();
+    fecha = new Date(fecha);
+    let diferencia = fechaActual.getFullYear() - fecha.getFullYear();
+    return diferencia;
+}
+console.log(calcularEdad("2000-01-01")); //  (25 anios)
+
+
+// 6) Realizar una función que devuelva el número de vocales y consonantes de una cadena de texto pasada como parámetro 
+
+function contarVocales(str){
+    let contadorVocales = 0 ;
+    let contadorConsonantes = 0;
+    let consonantes = ["b","c","d","f","g","h","j","k","l","m","n","ñ","p","q","r","s","t","v","w","x","y"];
+    let vocales = ["a","e","i","o","u"];
+    strFinal = str.toLowerCase().split("").join("");
+    for(let i =0; i < strFinal.length; i++){
+        if(vocales.includes(strFinal[i])){
+            contadorVocales++;
+        }else if(consonantes.includes(strFinal[i])){
+            contadorConsonantes++;
+        }
+    }
+    return `Vocales: ${contadorVocales} Consonantes: ${contadorConsonantes}`;
+
+}
+
+console.log(contarVocales("Hola Mundo")); 
