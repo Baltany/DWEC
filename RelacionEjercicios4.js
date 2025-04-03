@@ -136,3 +136,23 @@ const devolverParesImpares=(arrayX)=>{
 }
 let arrayParesImpares = [1,2,3,4,5,6,7,8,9,0];
 console.log(devolverParesImpares(arrayParesImpares));
+
+
+// 9) Programa una función que dado un array de números devuelva un objeto con dos arrays, el primero 
+// contendrá el contenido del array original ordenado en forma ascendente y el segundo, el contenido del 
+// array original ordenado de forma descendiente. 
+// Ej ascendenteDescendente(([3, 5,3,8,6]) devolverá { asc: [3,3,5,6,8], desc: [8,6,5,3,3] }. 
+
+const devolverOrden=(array)=>{
+    // nuevamente muy importante el uso de spread para crear una copia del array,si no lo usaramos nos devolveria
+    // el mismo array original y no el ordenado.
+    let arrayAscendente = [...array].sort();
+    let arrayDescendente = [...array].sort().reverse();
+    return "Array ascendente: " + arrayAscendente + " y array descendente: "+ arrayDescendente;
+
+}
+
+let arrayOrden = [3,5,3,8,6];
+console.log(devolverOrden(arrayOrden));
+
+
