@@ -169,13 +169,20 @@ console.log(devolverOrden(arrayOrden));
 // automatizada e imprime la ficha técnica de cada película. 
 
 class Pelicula{
+
+    static generosValidos = [
+        "Action", "Adult", "Adventure", "Animation", "Biography", "Comedy", "Crime", "Documentary",
+        "Drama", "Family", "Fantasy", "Film Noir", "Game-Show", "History", "Horror", "Musical", 
+        "Music", "Mystery", "News", "Reality-TV", "Romance", "Sci-Fi", "Short", "Sport", "Talk-Show", 
+        "Thriller", "War", "Western"
+    ];
+
     constructor(id,titulo,director,estreno,pais,genero,calificacion){
         this.validarId(id);
         this.validarTitulo(titulo);
-        this.validarAñoEstreno(estreno);
+        this.validarAnioEstreno(estreno);
         this.validarPais(pais);
         this.validarGenero(genero);
-        this.validarCalificacion(calificacion);
         
         // Una vez ya validamos los datos ahora si se crea el objeto Pelicula
         this.id = id;
@@ -188,40 +195,80 @@ class Pelicula{
     }
 
     validarId(id){
+        if (!/^[a-zA-Z]{2}\d{7}$/.test(id)) {
+            throw new Error(`El ID "${id}" no es válido. Debe tener 2 letras seguidas de 7 números.`);
+        }
+    }
 
+    validarTitulo(titulo){
+        if (titulo.length > 100){
+            throw new Error(`El título ${titulo} excede los 100 caracteres.`);
+        }
     }
 
     validarGenero(genero){
-        let generosValidos = ["Action","Adult",
-            "Adventure", "Animation", "Biography", "Comedy", 
-            "Crime","Documentary" ,"Drama", "Family", "Fantasy", 
-            "Film  Noir", "Game-Show", "History", "Horror", "Musical",
-            "Music", "Mystery", "News", "Reality-TV", "Romance", "Sci-Fi", 
-            "Short", "Sport", "Talk-Show", "Thriller", "War", "Western"];
 
+        // vemos si lo que recibimos es un array o no
         if(!Array.isArray(genero) || genero.length === 0){
             throw new Error("El género debe ser un array de géneros");
         }
 
 
-        for(let genero = 0;genero < generosValidos.length;genero++){
-            if(!generosValidos.includes(genero)){
-                throw new Error("El genero no se encuentra en la lista");
+        // una vez recibido el array lo recorremos y vemos si coincide con alguno de los generos validos
+        for (let i = 0; i < genero.length; i++) {
+            if (!Pelicula.generosValidos.includes(genero[i])) {
+                throw new Error(`El género "${genero[i]}" no es válido.`);
             }
         }
         
 
     }
 
+    validarAnioEstreno(estreno){
+        if (!/^\d{4}$/.test(estreno) || estreno > new Date().getFullYear()) {
+            throw new Error(`El año "${estreno}" no es válido. Debe ser un número de 4 dígitos.`);
+        }
+    }
+
+    validarPais(pais){
+        if(!Array.isArray(pais) || pais.length === 0){
+            throw new Error("El país debe ser un array de países");
+        }
+    }
+
+
+
+    static mostrarGenerosValidos() {
+        return `Generos validos: ${this.generosValidos.join(", ")}`;
+    }
+
+    mostrarPelicula(){
+        return `
+        Pelicula: ${this.titulo}
+        ID: ${this.id}
+        Director: ${this.director}
+        Anio: ${this.anio}
+        Paises: ${this.pais.join(", ")}
+        Generos: ${this.genero.join(", ")}
+        Calificacion: ${this.calificacion}/10
+        `;
+    }
+
+
 
 }
 
+// Nos creamos varios objeto de pelicula y lo mostramos en pantalla
+const peliculas = [
+    new Pelicula("AB1234567", "Spiderman", "director1", 2010, ["USA", "Spain"], ["Sci-Fi", "Thriller"], 8.8),
+    new Pelicula("CD9876543", "Batman", "director2", 2019, ["South Korea"], ["Drama", "Thriller"], 9.0),
+    new Pelicula("EF4567891", "Pelicula3", "director3", 1972, ["USA"], ["Crime", "Drama"], 9.2)
+];
 
+// tenemos que recorrerlo con un forEach
+peliculas.forEach(pelicula => console.log(pelicula.mostrarPelicula()));
 
-
-
-
-
+console.log(Pelicula.mostrarGenerosValidos());
 
 
 
