@@ -347,5 +347,5 @@ class HabitacionHotel extends Habitacion{
 
 const hotel = new HabitacionHotel(101, 2, 3, "Balbino", 3, 10, 5);
 
-console.log("Precio de una habitación en el hotel:", hotel.calcularPrecio());
+console.log("Precio de una habitacion en el hotel:", hotel.calcularPrecio());
 console.log("Recaudacion total del hotel:", hotel.calcularRecaudacion());
