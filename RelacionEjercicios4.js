@@ -274,7 +274,10 @@ console.log(Pelicula.mostrarGenerosValidos());
 
 
 // 10) Crear el siguiente ejercicio de herencia en Orientación a objetos en javascript. 
-// Crear la clase habitación con los siguientes atributos: - número : número de habitación - capacidad: número de personas que la habitarán (1,2,3,4,5) - servicios: número de servicios disponibles en la habitación 
+// Crear la clase habitación con los siguientes atributos: 
+// - número : número de habitación 
+// - capacidad: número de personas que la habitarán (1,2,3,4,5) 
+// - servicios: número de servicios disponibles en la habitación 
 // Crear los siguientes métodos: - 
 // calcularPrecio(capacidad,servicios) que calcule el precio de cada habitación, sabiendo que 
 // por cada persona se pagarían 24 € y adicionalmente por cada servicio 3€ 
@@ -293,3 +296,56 @@ console.log(Pelicula.mostrarGenerosValidos());
 // el precio sería el de la habitación + 10% de ese precio. - 
 // calcularRecaudacionHotel que calcule el total que recaudaría el hotel si tuviese todas las 
 // habitaciones estándar y suites ocupadas
+
+
+
+class Habitacion {
+    constructor(numero, capacidad, servicios) {
+        this.numero = numero;
+        this.capacidad = capacidad;
+        this.servicios = servicios;
+    }
+    calcularPrecio() {
+        // precio inicial por persona
+        let precio = 24;
+        // precio por servicio
+        let precioServicio = 3;
+        // precio por capacidad + servicio
+        return (precio * this.capacidad) + (this.servicios * precioServicio)
+    }
+
+}
+
+class HabitacionHotel extends Habitacion{
+    // heredamos el constructor
+    constructor(numero, capacidad, servicios, director, categoria, numHabsEstandar, numHabsSuite) {
+        super(numero,capacidad,servicios);
+        this.director = director;
+        this.categoria = categoria;
+        this.numHabsEstandar = numHabsEstandar;
+        this.numHabsSuite = numHabsSuite;
+    }
+    calcularPrecio() {
+        let precio = super.calcularPrecio();
+        let porcentaje = (this.categoria - 1) * 0.5;
+        return precio + (precio * porcentaje);
+    }
+    calcularRecaudacion() {
+        // Habitaciones estándar (capacidad: 2, servicios: 2) Ejemplo
+        let habEstandar = new Habitacion(0, 2, 2);
+        let precioEstandar = habEstandar.calcularPrecio();
+        let totalEstandar = this.numHabsEstandar * precioEstandar;
+
+        // Habitaciones suite (capacidad: 2, servicios: 5) Ejemplo
+        let habSuite = new Habitacion(0, 2, 5);
+        let precioSuite = habSuite.calcularPrecio();
+        let totalSuite = this.numHabsSuite * precioSuite;
+
+        return totalEstandar + totalSuite;
+    }
+}
+
+const hotel = new HabitacionHotel(101, 2, 3, "Balbino", 3, 10, 5);
+
+console.log("Precio de una habitación en el hotel:", hotel.calcularPrecio());
+console.log("Recaudacion total del hotel:", hotel.calcularRecaudacion());
