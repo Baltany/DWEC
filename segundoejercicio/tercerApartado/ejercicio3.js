@@ -9,4 +9,13 @@
 //     incrementado en un 15%, mientras que si la persona es menor de 50 años, el salario base se incrementa 
 //     solamente un 7,5%, y, si la persona tiene más de 60 años, el salario base se incrementará en un 20% 
 
-document.getElementById()
+let nombre = document.getElementById("nombre").value;
+let edad = document.getElementById("edad").value;
+let salario = document.getElementById("salario").value;
+
+let enviar = document.getElementById("Enviar");
+
+enviar.addEventListener("click", function(){
+    console.log(nombre,edad,salario);
+})
+
