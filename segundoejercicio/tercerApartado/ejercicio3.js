@@ -9,13 +9,45 @@
 //     incrementado en un 15%, mientras que si la persona es menor de 50 años, el salario base se incrementa 
 //     solamente un 7,5%, y, si la persona tiene más de 60 años, el salario base se incrementará en un 20% 
 
-let nombre = document.getElementById("nombre").value;
-let edad = document.getElementById("edad").value;
-let salario = document.getElementById("salario").value;
 
-let enviar = document.getElementById("Enviar");
+let enviar = document.getElementById("enviar");
 
 enviar.addEventListener("click", function(){
-    console.log(nombre,edad,salario);
+    // para no perder la información del formulario una vez se envia
+    event.preventDefault();
+    let nombre = document.getElementById("nombre").value;
+    let edad = parseInt(document.getElementById("edad").value);
+    let salario = parseInt(document.getElementById("salario").value);
+
+    if(salario>2000){
+        alert("No se realizo ningun ajuste adicional");
+        
+    }else if (salario>=1000 && salario<=2000 ){
+        if(edad>50){
+            salario += salario * 0.1;
+            alert("Su salario ahora es de: " + salario);
+        }else{
+            salario += salario * 0.05;
+            alert("Su salario ahora es de: " + salario);
+        }
+    }else if (salario<1000){
+        if(edad>=50 && edad <= 60){
+            salario += salario * 0.15; 
+            alert("Su salario ahora es de: " + salario);
+
+        }else if(edad>50){
+            salario += salario * 0.075;
+            alert("Su salario ahora es de: " + salario);
+
+        } else if (edad > 60) {
+            salario += salario * 0.20;
+            alert("Su salario ahora es de: " + salario);
+
+        }
+
+
+    }
+
+    //console.log(nombre,edad,salario);
 })
 
