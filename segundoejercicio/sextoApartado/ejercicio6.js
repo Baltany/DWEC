@@ -1,5 +1,6 @@
 const primitiva = document.getElementById("primitiva");
 
+
 // creamos la vista del usuario,la tabla
 function crearTabla(){
     // inicializamos la tabla que empieza en uno y acaba en 49
@@ -7,15 +8,15 @@ function crearTabla(){
     let numero = 1;
     for (let i = 0; i < 7; i++) {
         const fila = document.createElement("tr");
-        for(let j = 0;j >7;j++){
+        for(let j = 0;j < 7 && numero <= 49;j++){
             const celda = document.createElement("td");
             celda.id = "celda-" + numero;
-            fila.textContent = numero;
+            fila.appendChild(celda);
             numero++;
 
         }
+        primitiva.appendChild(fila);
     }
-    primitiva.appendChild(fila);
 }
 
 // funcion que genera numero aleatorios
@@ -32,7 +33,7 @@ function generarAleatorio(){
 // para volver a jugar limpiamos la tabla
 function limpiarTabla(){
     //limpiamos celda a celda
-    for(let i=0;i<=49;i++){
+    for(let i=1;i<=49;i++){
         const celda = document.getElementById("celda-" + i);
         celda.textContent = i;
     }
