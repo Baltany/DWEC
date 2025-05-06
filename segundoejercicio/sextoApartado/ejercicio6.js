@@ -45,6 +45,7 @@ function apostar(){
     for(const numero of apuesta){
         const celda = document.getElementById("celda-" + numero);
         celda.classList.add("apuesta");
+        // con esto cambiamos el numero por una x simulando que salido dicho numero
         celda.textContent = "X";
 
     }
