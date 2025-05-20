@@ -6,12 +6,12 @@
     mensajeBienvenida.style.backgroundColor = "white";
     mensajeBienvenida.style.color = "black";
     mensajeBienvenida.style.padding = "10px";
-    document.body.insertBefore(mensajeBienvenida, document.body.firstChild);
 
     botonAcceder.addEventListener("click", function() {
         if (usuario.value === "" || password.value === "") {
             alert("Usuario y contraseña son obligatorios.");
         } else if (usuario.value === "root" && password.value === "_root55_") {
+            alert("Bienvenido Administrador")
             mensajeBienvenida.innerHTML = "Bienvenido Administrador";
             mensajeBienvenida.classList.remove("oculto");
         } else {
