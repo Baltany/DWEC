@@ -42,9 +42,9 @@ consola todo lo elegido mediante el formulario (0,75 puntos) -->
     <hr>
     <h2>Identificación:</h2><br>
                    <label for="Usuarior">Usuario</label>
-                   <input type="text" id="profesor"><br>
-                   <label for="Password" >Contraseña:</label>
-                   <input type="password" id="password"><br>
+                   <input type="text" id="profesor" required><br>
+                   <label for="Password">Contraseña:</label>
+                   <input type="password" id="password" required><br>
                    <input type="button" value="Acceder">
                    <p></p>
     </div>
@@ -72,29 +72,6 @@ consola todo lo elegido mediante el formulario (0,75 puntos) -->
     </tr>
     </table>
 </div>
-<script>
-    var usuario = document.getElementById("profesor");
-    var password = document.getElementById("password");
-    var botonAcceder = document.querySelector('input[type="button"]');
-    var mensajeBienvenida = document.createElement("div");
-    mensajeBienvenida.className = "oculto";
-    mensajeBienvenida.style.backgroundColor = "white";
-    mensajeBienvenida.style.color = "black";
-    mensajeBienvenida.style.padding = "10px";
-    document.body.insertBefore(mensajeBienvenida, document.body.firstChild);
-
-    botonAcceder.addEventListener("click", function() {
-        if (usuario.value === "" || password.value === "") {
-            alert("Usuario y contraseña son obligatorios.");
-        } else if (usuario.value === "root" && password.value === "_root55_") {
-            mensajeBienvenida.innerHTML = "Bienvenido Administrador";
-            mensajeBienvenida.classList.remove("oculto");
-        } else {
-            alert("Usuario o contraseña incorrectos.");
-        }
-    });
-    
-
-</script>
+<script src="ejericico1.js"></script>
 </body>
 </html>

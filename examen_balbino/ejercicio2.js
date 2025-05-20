@@ -7,6 +7,7 @@ const matriz = document.getElementById("matrizOriginal");
 const matrizInvertida = document.getElementById("matrizInvertida");
 const filas = 10;
 const columnas = 10;
+
 const tablero = [];
 for(let i = 0; i < filas; i++){
     tablero[i] = [];
@@ -24,6 +25,8 @@ for(let i = 0; i < filas; i++){
     }
     tablero.push(fila);
 }
+console.log(tablero);
+
 // pintamos la matriz invertida
 for(let i = 0; i < filas; i++){
     const fila = [];
@@ -32,6 +35,7 @@ for(let i = 0; i < filas; i++){
     }
     tablero.push(fila);
 }
+console.log(tablero);
 
 
 // rellanar la matriz de numeros aleatorios entre el 10 y 80
@@ -51,7 +55,6 @@ console.log(generarAleatorio());
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
 
 
 
