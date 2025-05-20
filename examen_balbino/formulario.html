@@ -13,6 +13,30 @@
     </style>
 </head>
 <body>
+    <!-- IES Marqués de Comares (Lucena)
+1) Crear un programa javascript para el control de materiales deportivos del IES Marqués de Comares, para locual usamos el
+formulario llamado formulario_examen.html que se encuentra en el zip del examen. (4 puntos)
+2) Controlar que usuario y contraseña sean obligatorios,
+y que la contraseña atienda al patrón siguiente: empiece por
+guión bajo o guión alto( _ o -), seguida de 4 letras minúsculas,
+2 números del 5 al 9 y finalice con otro guión bajo (1 punto)
+a) Simular el funcionamiento de identificación en una
+página mediante el mecanismo siguiente: solo será válida la
+identificación cuando al pulsar el botón Acceder, el usuario
+sea root y la contraseña sea _root01_ , y que si efectivamente
+la identificación es correcta, aparezca justo encima del texto
+“Identificacion” un mensaje con fondo blanco y texto negro
+en el que aparezca Bienvenido Administrador (0,5 puntos)
+b) Al seleccionar del cuadro de lista Deporte a gestionar, debe responder a lo siguiente:
+• Si se ha elegido baloncesto, debe aparecer justo debajo del Texto Materiales, tres casillas de verificación con las opciones
+“Balones”, “Silbatos”, “Petos”, junto con un cuadro de texto con el texto “Unidades”al lado de cada casilla de verificación
+para que se puedan elegir uno o varios de esos materiales a reponer, así como sus unidades. (0,75 puntos)
+• Si se elige fútbol debe aparecer justo debajo ldel Texto Materiales as opciones de radio “material de competición” y
+“material de entrenamiento” una en cada línea para que se pueda elegir entre una de las dos opciones mencionadas. Además,
+una vez pulsada una de las opciones, mostrará justo al lado de dicha opción un label “Unidades” junto con un cuadro de
+texto de introducción obligatoria para introducir las unidades de ese material que se desea adquirir (1 punto)
+c) Una vez pulsado el botón enviar, se debe inhabilitar la función de los botones “Enviar” y “Limpiar” y mostrar por
+consola todo lo elegido mediante el formulario (0,75 puntos) -->
     <div>
     <h1>Gestión Material Deportivo IES Marqués de Comares</h1>
     <hr>
@@ -48,5 +72,29 @@
     </tr>
     </table>
 </div>
+<script>
+    var usuario = document.getElementById("profesor");
+    var password = document.getElementById("password");
+    var botonAcceder = document.querySelector('input[type="button"]');
+    var mensajeBienvenida = document.createElement("div");
+    mensajeBienvenida.className = "oculto";
+    mensajeBienvenida.style.backgroundColor = "white";
+    mensajeBienvenida.style.color = "black";
+    mensajeBienvenida.style.padding = "10px";
+    document.body.insertBefore(mensajeBienvenida, document.body.firstChild);
+
+    botonAcceder.addEventListener("click", function() {
+        if (usuario.value === "" || password.value === "") {
+            alert("Usuario y contraseña son obligatorios.");
+        } else if (usuario.value === "root" && password.value === "_root55_") {
+            mensajeBienvenida.innerHTML = "Bienvenido Administrador";
+            mensajeBienvenida.classList.remove("oculto");
+        } else {
+            alert("Usuario o contraseña incorrectos.");
+        }
+    });
+    
+
+</script>
 </body>
 </html>
