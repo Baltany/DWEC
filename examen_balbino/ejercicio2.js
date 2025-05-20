@@ -8,11 +8,13 @@ const matriz = document.getElementById("matriz");
 function generarAleatorio(){
     const numeros = [];
     while(numeros.length < 11){
-        const random = Math.floor(Math.random() * 80) + 1;
+        const random = Math.floor(Math.random() * 80) + 10;
         numeros.push(random);
     }
     return numeros;
 }
+
+// Comproibando que el numero aleatorio da entre 10-80
 console.log(generarAleatorio());
 
 function crearMatriz(){
