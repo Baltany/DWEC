@@ -1,1 +1,16 @@
-<p>navbar works!</p>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" routerLink="/">Angular Auth</a>
+        <div class="navbar-nav ml-auto">
+            <ng-container *ngIf="isLoggedIn; else notLoggedIn">
+                <span class="nav-item nav-link">Hola,
+                    {{currentUser?.name}}</span>
+                <button class="btn btn-outline-danger" (click)="logout()">Cerrar Sesión</button>
+            </ng-container>
+            <ng-template #notLoggedIn="#notLoggedIn">
+                <a class="nav-item nav-link" routerLink="/login">Iniciar Sesión</a>
+                <a class="nav-item nav-link" routerLink="/register">Registrarse</a>
+            </ng-template>
+        </div>
+    </div>
+</nav>
