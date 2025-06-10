@@ -1,9 +1,15 @@
 {
-    "users": [
-        {
-            "id": 1,
-            "email": "admin@example.com",
-            "password": "balbi"
-        }
-    ]
+  "users": [
+    {
+      "id": 1,
+      "email": "admin@example.com",
+      "password": "balbi"
+    },
+    {
+      "id": "015f",
+      "name": "Balbino Moyano López",
+      "email": "baltanyml@gmail.com",
+      "password": "hola123"
+    }
+  ]
 }
