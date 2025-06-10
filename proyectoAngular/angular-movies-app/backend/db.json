@@ -1,0 +1,22 @@
+{
+    "users": [
+        {
+            "id": 1,
+            "email": "admin@example.com",
+            "password": "balbi",
+            "role": "admin"
+        }, {
+            "id": 2,
+            "email": "cliente@example.com",
+            "password": "client",
+            "role": "cliente"
+        }
+    ],
+    "movies": [
+        {
+            "id": 1,
+            "title": "Spiderman No way Home",
+            "year": 2010
+        }
+    ]
+}
