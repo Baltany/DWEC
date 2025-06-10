@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, ReactiveFormsModule } from '@angular/forms'; 
-import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../auth';
-import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common'; 
+import { Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   standalone: true, 
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule], // Añade RouterModule
   selector: 'app-login',
   templateUrl: './login.html',
   styleUrls: ['./login.css']
@@ -36,7 +35,7 @@ export class LoginComponent {
     this.authService.login(email, password).subscribe({
       next: (user) => {  
         if (user) { 
-          this.router.navigate(['/']);
+          this.router.navigate(['/']); // Redirige a home si login es exitoso
         } else {
           alert('Credenciales incorrectas');
         }
@@ -46,5 +45,10 @@ export class LoginComponent {
         alert('Error en el login. Intenta nuevamente.');
       }
     });
+  }
+
+  // Método para redirigir a registro (opcional)
+  goToRegister() {
+    this.router.navigate(['/register']);
   }
 }
