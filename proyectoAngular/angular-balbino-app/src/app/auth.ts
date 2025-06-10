@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-
 interface User {
   id?: number;
   name: string;
@@ -25,14 +24,21 @@ export class AuthService {
     return this.http.post<User>(this.apiUrl, user);
   }
 
-  login(credentials: { email: string; password: string; }, password: any): Observable<User[]> {
+  // ✅ MÉTODO LOGIN CORREGIDO
+  login(email: string, password: string): Observable<User[]> {
+    console.log('AuthService.login llamado con:', { email, password });
+    
     return this.http.get<User[]>(
-      `${this.apiUrl}?email=${credentials.email}&password=${credentials.password}`
+      `${this.apiUrl}?email=${email}&password=${password}`
     ).pipe(
       tap((users: User[]) => {
+        console.log('Respuesta del servidor:', users);
         if (users.length > 0) {
+          console.log('Usuario encontrado, guardando en localStorage');
           localStorage.setItem('currentUser', JSON.stringify(users[0]));
           this.loggedIn.next(true);
+        } else {
+          console.log('No se encontró usuario con esas credenciales');
         }
       })
     );
