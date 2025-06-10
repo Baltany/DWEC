@@ -1,22 +1,25 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, ReactiveFormsModule } from '@angular/forms'; 
+import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../auth';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common'; 
 
 @Component({
+  standalone: true, 
+  imports: [ReactiveFormsModule, CommonModule],
   selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  templateUrl: './login.html',
+  styleUrls: ['./login.css']
 })
 export class LoginComponent {
-  loginForm: any; // Declaramos el formulario sin inicializar
+  loginForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router
   ) {
-    // Inicializamos el formulario en el constructor
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
@@ -25,22 +28,15 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginForm.invalid) {
-      return; // Si el formulario no es válido, no continuar
+      return;
     }
 
     const { email, password } = this.loginForm.value;
 
-    // Verificación adicional por si acaso
-    if (!email || !password) {
-      alert('Por favor, complete todos los campos');
-      return;
-    }
-
-    this.authService.login({ email, password }).subscribe({
-      next: (response: any) => {
-        // Asumimos que el servicio retorna un objeto con user o token
-        if (response?.user || response?.token) {
-          this.router.navigate(['/']); // Redirigir al home
+    this.authService.login(email, password).subscribe({
+      next: (user) => {  
+        if (user) { 
+          this.router.navigate(['/']);
         } else {
           alert('Credenciales incorrectas');
         }

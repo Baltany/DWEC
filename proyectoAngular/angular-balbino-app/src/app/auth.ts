@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
+
 interface User {
   id?: number;
   name: string;
@@ -24,7 +25,7 @@ export class AuthService {
     return this.http.post<User>(this.apiUrl, user);
   }
 
-  login(credentials: {email: string, password: string}): Observable<User[]> {
+  login(credentials: { email: string; password: string; }, password: any): Observable<User[]> {
     return this.http.get<User[]>(
       `${this.apiUrl}?email=${credentials.email}&password=${credentials.password}`
     ).pipe(

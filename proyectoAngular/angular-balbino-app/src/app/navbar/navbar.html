@@ -2,15 +2,14 @@
     <div class="container">
         <a class="navbar-brand" routerLink="/">Angular Auth</a>
         <div class="navbar-nav ml-auto">
-            <ng-container *ngIf="isLoggedIn; else notLoggedIn">
-                <span class="nav-item nav-link">Hola,
-                    {{currentUser?.name}}</span>
-                <button class="btn btn-outline-danger" (click)="logout()">Cerrar Sesión</button>
-            </ng-container>
-            <ng-template #notLoggedIn="#notLoggedIn">
-                <a class="nav-item nav-link" routerLink="/login">Iniciar Sesión</a>
-                <a class="nav-item nav-link" routerLink="/register">Registrarse</a>
-            </ng-template>
+            @if (isLoggedIn) {
+            <span class="nav-item nav-link">Hola,
+                {{currentUser?.name}}</span>
+            <button class="btn btn-outline-danger" (click)="logout()">Cerrar Sesión</button>
+            } @else {
+            <a class="nav-item nav-link" routerLink="/login">Iniciar Sesión</a>
+            <a class="nav-item nav-link" routerLink="/register">Registrarse</a>
+            }
         </div>
     </div>
 </nav>
