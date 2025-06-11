@@ -1,47 +1,71 @@
-import { Component, inject } from '@angular/core';
-import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormBuilder, Validators, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from '../auth';
+import { Usuario } from '../services/usuario'; // ✅ Importar Usuario
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../auth';
 
 @Component({
-  selector: 'app-register',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, RouterModule],
+  selector: 'app-register',
   templateUrl: './register.html',
   styleUrls: ['./register.css']
 })
 export class RegisterComponent {
-  private fb = inject(FormBuilder);
-  private authService = inject(AuthService);
-  private router = inject(Router);
+  registerForm: FormGroup;
+  isLoading = false;
+  errorMessage = '';
 
-  registerForm = this.fb.group({
-    name: ['', [Validators.required]],
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]]
-  });
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
+    this.registerForm = this.fb.group({
+      nombre: ['', Validators.required], // ✅ nombre, no name
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
+    });
+  }
 
   onSubmit() {
-    if (this.registerForm.valid) {
-      // ✅ Ahora incluimos el rol "cliente" por defecto
-      const userData = {
-        name: this.registerForm.value.name as string,
-        email: this.registerForm.value.email as string,
-        password: this.registerForm.value.password as string,
-        role: 'cliente' as const 
-      };
-
-      this.authService.register(userData).subscribe({
-        next: () => {
-          alert('Registro exitoso! Por favor inicia sesión.');
-          this.router.navigate(['/login']);
-        },
-        error: (err) => {
-          alert('Error en el registro. Intenta nuevamente.');
-          console.error(err);
-        }
-      });
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
+      return;
     }
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    const userData: Usuario = { // ✅ Tipado correcto
+      nombre: this.registerForm.get('nombre')?.value, // ✅ usando registerForm
+      email: this.registerForm.get('email')?.value,
+      password: this.registerForm.get('password')?.value,
+      rol: 'cliente'
+    };
+
+    console.log('Datos a registrar:', userData);
+
+    this.authService.register(userData).subscribe({
+      next: (success: boolean) => { // ✅ Tipado correcto
+        if (success) {
+          console.log('✅ Registro exitoso');
+          this.router.navigate(['/home']);
+        } else {
+          this.errorMessage = 'Error al registrar usuario';
+        }
+        this.isLoading = false;
+      },
+      error: (err: any) => { // ✅ Tipado error
+        console.error('❌ Error en registro:', err);
+        this.errorMessage = 'Error en el servidor. Intenta nuevamente.';
+        this.isLoading = false;
+      }
+    });
+  }
+
+  goToLogin() {
+    this.router.navigate(['/login']);
   }
 }

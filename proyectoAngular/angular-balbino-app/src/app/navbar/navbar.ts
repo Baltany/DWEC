@@ -1,29 +1,37 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, NgIf } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { AuthService } from '../auth';
+import { AuthService } from '../auth'; // Ajusta la ruta según tu estructura
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
-  standalone: true,
-  imports: [CommonModule, RouterModule, NgIf],
   templateUrl: './navbar.html',
-  styleUrls: ['./navbar.css']
+  styleUrls: ['./navbar.css'] // Si tienes estilos
 })
 export class NavbarComponent implements OnInit {
   isLoggedIn = false;
-  currentUser: any;
+  currentUser: any = null; // Aquí está la propiedad que faltaba
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    public authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-    this.authService.isLoggedIn().subscribe(loggedIn => {
-      this.isLoggedIn = loggedIn;
-      this.currentUser = this.authService.getCurrentUser();
-    });
+    // Suscribirse al estado de autenticación
+    this.authService.isLoggedIn$.subscribe(
+      (loggedIn) => {
+        this.isLoggedIn = loggedIn;
+        if (loggedIn) {
+          this.currentUser = this.authService.getCurrentUser();
+        } else {
+          this.currentUser = null;
+        }
+      }
+    );
   }
 
   logout() {
     this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

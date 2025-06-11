@@ -1,25 +1,33 @@
 {
-  "users": [
+  "usuarios": [
     {
       "id": 1,
-      "name": "Administrador",
+      "nombre": "Administrador",
       "email": "admin@example.com",
       "password": "balbi",
-      "role": "admin"
+      "rol": "admin"
     },
     {
       "id": "015f",
-      "name": "Balbino Moyano López",
+      "nombre": "Balbino Moyano López",
       "email": "baltanyml@gmail.com",
       "password": "hola123",
-      "role": "cliente"
+      "rol": "cliente"
     },
     {
       "id": "a802",
-      "name": "Balbino Moyano López",
+      "nombre": "Balbino Moyano López",
       "email": "bmoylop0903@g.educaand.es",
       "password": "123456",
-      "role": "cliente"
+      "rol": "cliente"
+    },
+    {
+      "id": "e16a",
+      "nombre": "prueba",
+      "email": "prueba@prueba.com",
+      "password": "prueba",
+      "rol": "cliente",
+      "fechaCreacion": "2025-06-11T20:06:59.403Z"
     }
   ],
   "peliculas": [

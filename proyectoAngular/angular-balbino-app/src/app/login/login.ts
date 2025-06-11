@@ -3,6 +3,7 @@ import { FormBuilder, Validators, FormGroup, ReactiveFormsModule } from '@angula
 import { AuthService } from '../auth';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Usuario } from '../services/usuario';
 
 @Component({
   standalone: true, 
@@ -27,59 +28,47 @@ export class LoginComponent {
     });
   }
 
-onSubmit() {
-  if (this.loginForm.invalid) {
-    this.loginForm.markAllAsTouched();
-    return;
-  }
+  onSubmit() {
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
+    }
 
-  this.isLoading = true;
-  this.errorMessage = '';
+    this.isLoading = true;
+    this.errorMessage = '';
 
-  const email = this.loginForm.get('email')?.value;
-  const password = this.loginForm.get('password')?.value;
+    const email = this.loginForm.get('email')?.value;
+    const password = this.loginForm.get('password')?.value;
 
-  console.log('Email extraído:', email);
-  console.log('Password extraído:', password);
-  console.log('Llamando al AuthService.login()...');
+    console.log('Email extraído:', email);
+    console.log('Password extraído:', password);
+    console.log('Llamando al AuthService.login()...');
 
-  this.authService.login(email, password).subscribe({
-    next: (users) => {  
-      console.log('RESPUESTA COMPLETA del AuthService:', users);
-      console.log('Número de usuarios encontrados:', users.length);
+    this.authService.login(email, password).subscribe({
+    next: (loginSuccess: boolean) => { // ✅ Tipado correcto
+      console.log('RESPUESTA del AuthService (boolean):', loginSuccess);
       
-      if (users && Array.isArray(users) && users.length > 0) {
-        console.log('✅ Login exitoso - usuario encontrado:', users[0]);
-        console.log('✅ Intentando redirigir...');
+      if (loginSuccess) {
+        console.log('✅ Login exitoso');
+        const currentUser = this.authService.getCurrentUser();
+        console.log('Usuario actual:', currentUser);
         
-        // Prueba diferentes rutas
         this.router.navigate(['/home']).then(
           (success) => {
-            console.log('Navegación a /home exitosa:', success);
+            console.log('Navegación exitosa:', success);
           },
           (error) => {
-            console.error('Error navegando a /home:', error);
-            // Si /home falla, prueba con otras rutas
-            console.log('Probando navegación a /...');
-            this.router.navigate(['/']).then(
-              (success2) => {
-                console.log('Navegación a / exitosa:', success2);
-              },
-              (error2) => {
-                console.error('Error navegando a /:', error2);
-                console.log('Rutas disponibles en el router:', this.router.config);
-              }
-            );
+            console.error('Error navegando:', error);
           }
         );
       } else {
-        console.log('❌ Login fallido - credenciales incorrectas');
+        console.log('❌ Login fallido');
         this.errorMessage = 'Credenciales incorrectas';
       }
       this.isLoading = false;
     },
-    error: (error) => {
-      console.error('❌ ERROR COMPLETO en el login:', error);
+    error: (error: any) => { // ✅ Tipado error
+      console.error('❌ ERROR en el login:', error);
       this.errorMessage = 'Error en el servidor. Intenta nuevamente.';
       this.isLoading = false;
     }

@@ -18,7 +18,7 @@ export class HomeComponent implements OnInit {
   loading = true;
 
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     private peliculaService: PeliculaService,
     private router: Router
   ) {}

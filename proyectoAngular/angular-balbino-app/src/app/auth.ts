@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { UsuarioService, Usuario } from './services/usuario';
+import { UsuarioService, Usuario } from './services/usuario'; // Corregir ruta
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService { // ✅ Ya está exportado
   private currentUserSubject = new BehaviorSubject<Usuario | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
+  public isLoggedIn$ = this.currentUser$.pipe(
+    map(user => user !== null)
+  ); 
 
   constructor(private usuarioService: UsuarioService) {
-    // Recuperar usuario del localStorage al inicializar
     const storedUser = localStorage.getItem('currentUser');
     if (storedUser) {
       this.currentUserSubject.next(JSON.parse(storedUser));
@@ -23,32 +25,30 @@ export class AuthService {
       map((usuarios: Usuario[]) => {
         const usuario = usuarios.find((u: Usuario) => u.email === email && u.password === password);
         if (usuario) {
-          // Guardar usuario en localStorage y actualizar subject
           localStorage.setItem('currentUser', JSON.stringify(usuario));
           this.currentUserSubject.next(usuario);
           return true;
         }
         return false;
       }),
-      catchError(() => of(false))
+      catchError((error: any) => of(false)) // ✅ Tipado error
     );
   }
 
   register(usuario: Usuario): Observable<boolean> {
     return this.usuarioService.crearUsuario({
       ...usuario,
-      rol: 'cliente' // Por defecto los registros son clientes
+      rol: 'cliente'
     }).pipe(
       map((newUser: Usuario) => {
         if (newUser) {
-          // Auto-login después del registro
           localStorage.setItem('currentUser', JSON.stringify(newUser));
           this.currentUserSubject.next(newUser);
           return true;
         }
         return false;
       }),
-      catchError(() => of(false))
+      catchError((error: any) => of(false)) // ✅ Tipado error
     );
   }
 
@@ -75,3 +75,9 @@ export class AuthService {
     return user?.rol === 'cliente';
   }
 }
+
+
+
+// ✅ IMPORTANTE: Exportar explícitamente
+export { AuthService as default };
+

@@ -5,9 +5,9 @@
             <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
                 <div class="form-group">
                     <label for="name">Nombre</label>
-                    <input type="text" class="form-control" id="name" formControlName="name">
+                    <input type="text" class="form-control" id="nombre" formControlName="nombre">
                         <div
-                            *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched"
+                            *ngIf="registerForm.get('nombre')?.invalid && registerForm.get('nombre')?.touched"
                             class="text-danger">
                             Nombre es requerido
                         </div>
