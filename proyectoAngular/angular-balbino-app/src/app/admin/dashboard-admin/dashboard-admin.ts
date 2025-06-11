@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { UsuarioService, Usuario } from '../../services/usuario';
+import { UsuarioService, Usuario } from "../../services/usuario";
 import { PeliculaService, Pelicula } from '../../services/pelicula';
 import { AuthService } from '../../auth';
 
@@ -530,12 +530,12 @@ export class DashboardAdminComponent implements OnInit {
 
   cargarUsuarios(): void {
     this.usuarioService.getUsuarios().subscribe({
-      next: (usuarios) => {
+      next: (usuarios: Usuario[]) => {
         this.usuarios = usuarios;
         this.calcularEstadisticasUsuarios();
         this.loadingUsuarios = false;
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error al cargar usuarios:', error);
         this.loadingUsuarios = false;
       }
@@ -544,12 +544,12 @@ export class DashboardAdminComponent implements OnInit {
 
   cargarPeliculas(): void {
     this.peliculaService.getPeliculas().subscribe({
-      next: (peliculas) => {
+      next: (peliculas: Pelicula[]) => {
         this.peliculas = peliculas;
         this.totalPeliculas = peliculas.length;
         this.loadingPeliculas = false;
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error al cargar películas:', error);
         this.loadingPeliculas = false;
       }
@@ -596,7 +596,7 @@ export class DashboardAdminComponent implements OnInit {
           this.calcularEstadisticasUsuarios();
           alert('Usuario eliminado exitosamente');
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('Error al eliminar usuario:', error);
           alert('Error al eliminar el usuario');
         }
@@ -620,7 +620,7 @@ export class DashboardAdminComponent implements OnInit {
           this.totalPeliculas = this.peliculas.length;
           alert('Película eliminada exitosamente');
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('Error al eliminar película:', error);
           alert('Error al eliminar la película');
         }

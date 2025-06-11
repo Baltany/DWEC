@@ -20,8 +20,8 @@ export class AuthService {
 
   login(email: string, password: string): Observable<boolean> {
     return this.usuarioService.buscarPorEmail(email).pipe(
-      map(usuarios => {
-        const usuario = usuarios.find(u => u.email === email && u.password === password);
+      map((usuarios: Usuario[]) => {
+        const usuario = usuarios.find((u: Usuario) => u.email === email && u.password === password);
         if (usuario) {
           // Guardar usuario en localStorage y actualizar subject
           localStorage.setItem('currentUser', JSON.stringify(usuario));
@@ -39,7 +39,7 @@ export class AuthService {
       ...usuario,
       rol: 'cliente' // Por defecto los registros son clientes
     }).pipe(
-      map(newUser => {
+      map((newUser: Usuario) => {
         if (newUser) {
           // Auto-login después del registro
           localStorage.setItem('currentUser', JSON.stringify(newUser));
