@@ -1,0 +1,106 @@
+<div class="nueva-pelicula-container">
+    <div class="header">
+        <button class="btn-back" routerLink="/home">
+            ← Volver al inicio
+        </button>
+        <h1>Nueva Película</h1>
+        <p>Agrega una nueva película a tu colección</p>
+    </div>
+
+    <form [formGroup]="peliculaForm" (ngSubmit)="onSubmit()" class="pelicula-form">
+
+        <!-- Título -->
+        <div class="form-group">
+            <label for="titulo">Título *</label>
+            <input
+                id="titulo"
+                type="text"
+                formControlName="titulo"
+                placeholder="Ej: El Padrino"
+                [class.error]="peliculaForm.get('titulo')?.invalid && peliculaForm.get('titulo')?.touched">
+                <div class="error-message" *ngIf="getFieldError('titulo')">
+                    {{ getFieldError('titulo') }}
+                </div>
+            </div>
+
+            <!-- Director -->
+            <div class="form-group">
+                <label for="director">Director *</label>
+                <input
+                    id="director"
+                    type="text"
+                    formControlName="director"
+                    placeholder="Ej: Francis Ford Coppola"
+                    [class.error]="peliculaForm.get('director')?.invalid && peliculaForm.get('director')?.touched">
+                    <div class="error-message" *ngIf="getFieldError('director')">
+                        {{ getFieldError('director') }}
+                    </div>
+                </div>
+
+                <!-- Año y Género en la misma fila -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="anio">Año *</label>
+                        <input
+                            id="anio"
+                            type="number"
+                            formControlName="anio"
+                            placeholder="2024"
+                            [class.error]="peliculaForm.get('anio')?.invalid && peliculaForm.get('anio')?.touched">
+                            <div class="error-message" *ngIf="getFieldError('anio')">
+                                {{ getFieldError('anio') }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="genero">Género *</label>
+                            <select
+                                id="genero"
+                                formControlName="genero"
+                                [class.error]="peliculaForm.get('genero')?.invalid && peliculaForm.get('genero')?.touched">
+                                <option value="">Selecciona un género</option>
+                                <option *ngFor="let genero of generos" [value]="genero">
+                                    {{ genero }}
+                                </option>
+                            </select>
+                            <div class="error-message" *ngIf="getFieldError('genero')">
+                                {{ getFieldError('genero') }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Descripción -->
+                    <div class="form-group">
+                        <label for="descripcion">Descripción *</label>
+                        <textarea
+                            id="descripcion"
+                            formControlName="descripcion"
+                            placeholder="Escribe una breve descripción de la película..."
+                            rows="4"
+                            [class.error]="peliculaForm.get('descripcion')?.invalid && peliculaForm.get('descripcion')?.touched"></textarea>
+                        <div class="error-message" *ngIf="getFieldError('descripcion')">
+                            {{ getFieldError('descripcion') }}
+                        </div>
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="form-actions">
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            routerLink="/home"
+                            [disabled]="loading">
+                            Cancelar
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                            [disabled]="peliculaForm.invalid || loading">
+                            <span *ngIf="loading">Guardando...</span>
+                            <span *ngIf="!loading">🎬 Crear Película</span>
+                        </button>
+                    </div>
+
+                </form>
+            </div>

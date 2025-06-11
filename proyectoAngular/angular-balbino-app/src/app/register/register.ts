@@ -12,9 +12,9 @@ import { AuthService } from '../auth';
   styleUrls: ['./register.css']
 })
 export class RegisterComponent {
-  private fb = inject(FormBuilder); // Inyección con inject()
-  private authService = inject(AuthService); // Inyección con inject()
-  private router = inject(Router); // Inyección con inject()
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
   registerForm = this.fb.group({
     name: ['', [Validators.required]],
@@ -24,10 +24,12 @@ export class RegisterComponent {
 
   onSubmit() {
     if (this.registerForm.valid) {
+      // ✅ Ahora incluimos el rol "cliente" por defecto
       const userData = {
         name: this.registerForm.value.name as string,
         email: this.registerForm.value.email as string,
-        password: this.registerForm.value.password as string
+        password: this.registerForm.value.password as string,
+        role: 'cliente' as const 
       };
 
       this.authService.register(userData).subscribe({

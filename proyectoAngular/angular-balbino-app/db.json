@@ -2,14 +2,44 @@
   "users": [
     {
       "id": 1,
+      "name": "Administrador",
       "email": "admin@example.com",
-      "password": "balbi"
+      "password": "balbi",
+      "role": "admin"
     },
     {
       "id": "015f",
       "name": "Balbino Moyano López",
       "email": "baltanyml@gmail.com",
-      "password": "hola123"
+      "password": "hola123",
+      "role": "cliente"
+    },
+    {
+      "id": "a802",
+      "name": "Balbino Moyano López",
+      "email": "bmoylop0903@g.educaand.es",
+      "password": "123456",
+      "role": "cliente"
+    }
+  ],
+  "peliculas": [
+    {
+      "id": 1,
+      "titulo": "El Padrino",
+      "director": "Francis Ford Coppola",
+      "anio": 1972,
+      "genero": "Drama",
+      "descripcion": "Una familia de la mafia italiana en Nueva York",
+      "userId": "015f"
+    },
+    {
+      "id": 2,
+      "titulo": "Pulp Fiction",
+      "director": "Quentin Tarantino",
+      "anio": 1994,
+      "genero": "Crimen",
+      "descripcion": "Historias entrelazadas del crimen de Los Ángeles",
+      "userId": "015f"
     }
   ]
 }
