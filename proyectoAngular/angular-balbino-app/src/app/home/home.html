@@ -1,1 +1,84 @@
-<p>home works!</p>
+<div class="home-container">
+  <div class="header">
+    <h1>Bienvenido, {{ usuario?.nombre }}!</h1>
+    <div class="user-info">
+      <span class="role-badge" [class]="usuario?.rol">{{ usuario?.rol?.toUpperCase() }}</span>
+    </div>
+  </div>
+
+  <!-- Panel de Admin -->
+  <div *ngIf="authService.isAdmin()" class="admin-panel">
+    <button class="btn-admin" (click)="irADashboardAdmin()">
+      <i class="icon">👨‍💼</i>
+      Dashboard Admin
+    </button>
+  </div>
+
+  <!-- Sección de Películas -->
+  <div class="movies-section">
+    <div class="section-header">
+      <h2>
+        <span *ngIf="authService.isAdmin()">Todas las Películas</span>
+        <span *ngIf="authService.isCliente()">Mis Películas</span>
+      </h2>
+      <button class="btn-primary" (click)="crearPelicula()">
+        <i class="icon">➕</i>
+        Añadir Película
+      </button>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="loading" class="loading">
+      <div class="spinner"></div>
+      <p>Cargando películas...</p>
+    </div>
+
+    <!-- Lista de Películas -->
+    <div *ngIf="!loading && peliculas.length > 0" class="movies-grid">
+      <div *ngFor="let pelicula of peliculas" class="movie-card">
+        <div class="movie-poster">
+          <img [src]="pelicula.poster || '/assets/default-poster.jpg'" 
+               [alt]="pelicula.titulo" 
+               onerror="this.src='/assets/default-poster.jpg'">
+        </div>
+        
+        <div class="movie-info">
+          <h3>{{ pelicula.titulo }}</h3>
+          <p class="director"><strong>Director:</strong> {{ pelicula.director }}</p>
+          <p class="genre"><strong>Género:</strong> {{ pelicula.genero }}</p>
+          <p class="year"><strong>Año:</strong> {{ pelicula.anio }} | <strong>Duración:</strong> {{ pelicula.duracion }}min</p>
+          <p class="synopsis">{{ pelicula.sinopsis }}</p>
+          
+          <div class="movie-actions">
+            <button *ngIf="puedeEditarPelicula(pelicula)" 
+                    class="btn-edit" 
+                    (click)="editarPelicula(pelicula.id!)">
+              <i class="icon">✏️</i>
+              Editar
+            </button>
+            
+            <button *ngIf="puedeEditarPelicula(pelicula)" 
+                    class="btn-delete" 
+                    (click)="eliminarPelicula(pelicula.id!)">
+              <i class="icon">🗑️</i>
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sin Películas -->
+    <div *ngIf="!loading && peliculas.length === 0" class="no-movies">
+      <div class="empty-state">
+        <i class="icon">🎬</i>
+        <h3>No hay películas</h3>
+        <p *ngIf="authService.isCliente()">¡Comienza añadiendo tu primera película!</p>
+        <p *ngIf="authService.isAdmin()">No hay películas registradas en el sistema.</p>
+        <button class="btn-primary" (click)="crearPelicula()">
+          Añadir Primera Película
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

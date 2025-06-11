@@ -1,93 +1,77 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-
-interface User {
-  id?: number;
-  name: string;
-  email: string;
-  password: string;
-  role: 'admin' | 'cliente';  // ✅ Agregamos el rol
-}
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
+import { UsuarioService, Usuario } from './services/usuario';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private loggedIn = new BehaviorSubject<boolean>(false);
-  private currentUserSubject = new BehaviorSubject<User | null>(null);  // ✅ Para reactividad
-  private apiUrl = 'http://localhost:3000/users';
+  private currentUserSubject = new BehaviorSubject<Usuario | null>(null);
+  public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) {
-    // ✅ Inicializar el usuario actual si existe en localStorage
-    const savedUser = this.getCurrentUser();
-    if (savedUser) {
-      this.loggedIn.next(true);
-      this.currentUserSubject.next(savedUser);
+  constructor(private usuarioService: UsuarioService) {
+    // Recuperar usuario del localStorage al inicializar
+    const storedUser = localStorage.getItem('currentUser');
+    if (storedUser) {
+      this.currentUserSubject.next(JSON.parse(storedUser));
     }
   }
 
-  register(user: User): Observable<User> {
-    // ✅ Aseguramos que todos los nuevos usuarios sean "cliente"
-    const userWithRole = { ...user, role: 'cliente' as const };
-    return this.http.post<User>(this.apiUrl, userWithRole);
+  login(email: string, password: string): Observable<boolean> {
+    return this.usuarioService.buscarPorEmail(email).pipe(
+      map(usuarios => {
+        const usuario = usuarios.find(u => u.email === email && u.password === password);
+        if (usuario) {
+          // Guardar usuario en localStorage y actualizar subject
+          localStorage.setItem('currentUser', JSON.stringify(usuario));
+          this.currentUserSubject.next(usuario);
+          return true;
+        }
+        return false;
+      }),
+      catchError(() => of(false))
+    );
   }
 
-  login(email: string, password: string): Observable<User[]> {
-    console.log('AuthService.login llamado con:', { email, password });
-    
-    return this.http.get<User[]>(
-      `${this.apiUrl}?email=${email}&password=${password}`
-    ).pipe(
-      tap((users: User[]) => {
-        console.log('Respuesta del servidor:', users);
-        if (users.length > 0) {
-          console.log('Usuario encontrado, guardando en localStorage');
-          const user = users[0];
-          localStorage.setItem('currentUser', JSON.stringify(user));
-          this.loggedIn.next(true);
-          this.currentUserSubject.next(user);  // ✅ Actualizamos el subject
-        } else {
-          console.log('No se encontró usuario con esas credenciales');
+  register(usuario: Usuario): Observable<boolean> {
+    return this.usuarioService.crearUsuario({
+      ...usuario,
+      rol: 'cliente' // Por defecto los registros son clientes
+    }).pipe(
+      map(newUser => {
+        if (newUser) {
+          // Auto-login después del registro
+          localStorage.setItem('currentUser', JSON.stringify(newUser));
+          this.currentUserSubject.next(newUser);
+          return true;
         }
-      })
+        return false;
+      }),
+      catchError(() => of(false))
     );
   }
 
   logout(): void {
     localStorage.removeItem('currentUser');
-    this.loggedIn.next(false);
-    this.currentUserSubject.next(null);  // ✅ Limpiamos el subject
-    this.router.navigate(['/login']);
+    this.currentUserSubject.next(null);
   }
 
-  isLoggedIn(): Observable<boolean> {
-    return this.loggedIn.asObservable();
+  getCurrentUser(): Usuario | null {
+    return this.currentUserSubject.value;
   }
 
-  getCurrentUser(): User | null {
-    const user = localStorage.getItem('currentUser');
-    return user ? JSON.parse(user) : null;
-  }
-
-  getCurrentUser$(): Observable<User | null> {
-    return this.currentUserSubject.asObservable();
+  isLoggedIn(): boolean {
+    return this.currentUserSubject.value !== null;
   }
 
   isAdmin(): boolean {
     const user = this.getCurrentUser();
-    return user?.role === 'admin';
+    return user?.rol === 'admin';
   }
 
   isCliente(): boolean {
     const user = this.getCurrentUser();
-    return user?.role === 'cliente';
-  }
-
-  getUserRole(): 'admin' | 'cliente' | null {
-    const user = this.getCurrentUser();
-    return user?.role || null;
+    return user?.rol === 'cliente';
   }
 }
