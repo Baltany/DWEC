@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { UsuarioService, Usuario } from "../../services/usuario";
 import { PeliculaService, Pelicula } from '../../services/pelicula';
@@ -8,7 +9,7 @@ import { AuthService } from '../../auth';
 @Component({
   selector: 'app-dashboard-admin',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   template: `
     <div class="dashboard-container">
       <div class="header">
@@ -48,6 +49,79 @@ import { AuthService } from '../../auth';
             <h3>{{ totalAdmins }}</h3>
             <p>Administradores</p>
           </div>
+        </div>
+      </div>
+
+      <!-- Formulario de Usuario (Modal) -->
+      <div *ngIf="modoCreacion || modoEdicion" class="modal-overlay" (click)="cancelarEdicion()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+          <div class="modal-header">
+            <h3>{{ modoCreacion ? 'Crear Nuevo Usuario' : 'Editar Usuario' }}</h3>
+            <button class="btn-close" (click)="cancelarEdicion()">×</button>
+          </div>
+          
+          <form (ngSubmit)="guardarUsuario()" #userForm="ngForm" class="user-form">
+            <div class="form-group">
+              <label for="nombre">Nombre:</label>
+              <input 
+                type="text" 
+                id="nombre" 
+                name="nombre"
+                [(ngModel)]="usuarioForm.nombre" 
+                required 
+                class="form-control"
+                placeholder="Ingrese el nombre completo">
+            </div>
+            
+            <div class="form-group">
+              <label for="email">Email:</label>
+              <input 
+                type="email" 
+                id="email" 
+                name="email"
+                [(ngModel)]="usuarioForm.email" 
+                required 
+                class="form-control"
+                placeholder="usuario@ejemplo.com">
+            </div>
+            
+            <div class="form-group" *ngIf="modoCreacion">
+              <label for="password">Contraseña:</label>
+              <input 
+                type="password" 
+                id="password" 
+                name="password"
+                [(ngModel)]="usuarioForm.password" 
+                required 
+                class="form-control"
+                placeholder="Ingrese una contraseña segura">
+            </div>
+            
+            <div class="form-group">
+              <label for="rol">Rol:</label>
+              <select 
+                id="rol" 
+                name="rol"
+                [(ngModel)]="usuarioForm.rol" 
+                required 
+                class="form-control">
+                <option value="cliente">Cliente</option>
+                <option value="admin">Administrador</option>
+              </select>
+            </div>
+            
+            <div class="form-actions">
+              <button type="button" class="btn-cancel" (click)="cancelarEdicion()">
+                Cancelar
+              </button>
+              <button 
+                type="submit" 
+                class="btn-save" 
+                [disabled]="!userForm.form.valid || guardando">
+                {{ guardando ? 'Guardando...' : (modoCreacion ? 'Crear Usuario' : 'Actualizar Usuario') }}
+              </button>
+            </div>
+          </form>
         </div>
       </div>
 
@@ -235,6 +309,145 @@ import { AuthService } from '../../auth';
       color: #666;
       font-size: 0.9rem;
       font-weight: 500;
+    }
+
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 25px;
+      border-bottom: 1px solid #e0e0e0;
+      background: #f8f9fa;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      font-size: 1.3rem;
+      color: #333;
+    }
+
+    .btn-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #666;
+      padding: 0;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: background 0.3s ease;
+    }
+
+    .btn-close:hover {
+      background: #e0e0e0;
+    }
+
+    .user-form {
+      padding: 25px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: #333;
+      font-size: 0.9rem;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      transition: border-color 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: #4ecdc4;
+      box-shadow: 0 0 0 2px rgba(78, 205, 196, 0.2);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .btn-cancel {
+      background: #6c757d;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.3s ease;
+    }
+
+    .btn-cancel:hover {
+      background: #5a6268;
+    }
+
+    .btn-save {
+      background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .btn-save:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-save:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
     }
 
     .section {
@@ -496,6 +709,15 @@ import { AuthService } from '../../auth';
         flex-direction: column;
         text-align: center;
       }
+
+      .modal-content {
+        width: 95%;
+        margin: 20px;
+      }
+
+      .form-actions {
+        flex-direction: column;
+      }
     }
   `]
 })
@@ -508,6 +730,7 @@ export class DashboardAdminComponent implements OnInit {
   usuarioSeleccionado: Usuario | null = null;
   modoEdicion = false;
   modoCreacion = false;
+  guardando = false;
 
   // Estadísticas
   totalUsuarios = 0;
@@ -522,7 +745,6 @@ export class DashboardAdminComponent implements OnInit {
     password: '',
     rol: 'cliente'
   };
-
 
   constructor(
     private usuarioService: UsuarioService,
@@ -543,6 +765,7 @@ export class DashboardAdminComponent implements OnInit {
     this.usuarioService.getUsuarios().subscribe({
       next: (usuarios) => {
         this.usuarios = usuarios;
+        this.calcularEstadisticasUsuarios();
         this.loadingUsuarios = false;
       },
       error: (error) => {
@@ -553,6 +776,7 @@ export class DashboardAdminComponent implements OnInit {
   }
 
   cargarPeliculas(): void {
+    this.loadingPeliculas = true;
     this.peliculaService.getPeliculas().subscribe({
       next: (peliculas: Pelicula[]) => {
         this.peliculas = peliculas;
@@ -571,8 +795,6 @@ export class DashboardAdminComponent implements OnInit {
     this.totalClientes = this.usuarios.filter(u => u.rol === 'cliente').length;
     this.totalAdmins = this.usuarios.filter(u => u.rol === 'admin').length;
   }
-
-
 
   getUsuarioNombre(usuarioId?: number): string {
     if (!usuarioId) return 'N/A';
@@ -597,35 +819,53 @@ export class DashboardAdminComponent implements OnInit {
     if (usuario) {
       this.modoEdicion = true;
       this.modoCreacion = false;
-      this.usuarioForm = { ...usuario };
+      this.usuarioForm = { 
+        ...usuario,
+        password: '' // No mostrar la contraseña en el formulario de edición
+      };
     }
   }
+
   guardarUsuario(): void {
+    this.guardando = true;
+    
     if (this.modoCreacion) {
       this.usuarioService.crearUsuario(this.usuarioForm).subscribe({
         next: (nuevoUsuario) => {
           this.usuarios.push(nuevoUsuario);
+          this.calcularEstadisticasUsuarios();
           this.cancelarEdicion();
+          this.guardando = false;
           alert('Usuario creado exitosamente');
         },
         error: (error) => {
           console.error('Error al crear usuario:', error);
-          alert('Error al crear usuario');
+          this.guardando = false;
+          alert('Error al crear usuario: ' + (error.error?.message || 'Error desconocido'));
         }
       });
     } else if (this.modoEdicion) {
-      this.usuarioService.actualizarUsuario(this.usuarioForm.id!, this.usuarioForm).subscribe({
+      // Si no se proporciona nueva contraseña, eliminar el campo
+      const usuarioParaActualizar = { ...this.usuarioForm };
+      if (!usuarioParaActualizar.password) {
+        delete usuarioParaActualizar.password;
+      }
+      
+      this.usuarioService.actualizarUsuario(this.usuarioForm.id!, usuarioParaActualizar).subscribe({
         next: (usuarioActualizado) => {
           const index = this.usuarios.findIndex(u => u.id === usuarioActualizado.id);
           if (index !== -1) {
             this.usuarios[index] = usuarioActualizado;
           }
+          this.calcularEstadisticasUsuarios();
           this.cancelarEdicion();
+          this.guardando = false;
           alert('Usuario actualizado exitosamente');
         },
         error: (error) => {
           console.error('Error al actualizar usuario:', error);
-          alert('Error al actualizar usuario');
+          this.guardando = false;
+          alert('Error al actualizar usuario: ' + (error.error?.message || 'Error desconocido'));
         }
       });
     }
@@ -636,11 +876,12 @@ export class DashboardAdminComponent implements OnInit {
       this.usuarioService.eliminarUsuario(id).subscribe({
         next: () => {
           this.usuarios = this.usuarios.filter(u => u.id !== id);
+          this.calcularEstadisticasUsuarios();
           alert('Usuario eliminado exitosamente');
         },
         error: (error) => {
           console.error('Error al eliminar usuario:', error);
-          alert('Error al eliminar usuario');
+          alert('Error al eliminar usuario: ' + (error.error?.message || 'Error desconocido'));
         }
       });
     }
@@ -649,6 +890,7 @@ export class DashboardAdminComponent implements OnInit {
   cancelarEdicion(): void {
     this.modoEdicion = false;
     this.modoCreacion = false;
+    this.guardando = false;
     this.usuarioForm = {
       id: 0,
       nombre: '',
@@ -657,7 +899,6 @@ export class DashboardAdminComponent implements OnInit {
       rol: 'cliente'
     };
   }
-
 
   crearPelicula(): void {
     this.router.navigate(['/peliculas/nueva']);
@@ -677,7 +918,7 @@ export class DashboardAdminComponent implements OnInit {
         },
         error: (error: any) => {
           console.error('Error al eliminar película:', error);
-          alert('Error al eliminar la película');
+          alert('Error al eliminar la película: ' + (error.error?.message || 'Error desconocido'));
         }
       });
     }
