@@ -48,7 +48,9 @@
 }
 
 .admin-panel {
-  margin-bottom: 30px;
+    display: flex;
+    margin-bottom: 30px;
+    gap: 10px; 
 }
 
 .btn-admin {

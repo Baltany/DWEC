@@ -13,12 +13,6 @@
       "email": "baltanyml@gmail.com",
       "password": "hola123",
       "rol": "cliente"
-    },
-    {
-      "id": "15",
-      "nombre": "Pedro",
-      "email": "pdewfrgetarra@parra.com",
-      "rol": "cliente"
     }
   ],
   "peliculas": [
@@ -43,6 +37,18 @@
       "userId": 1,
       "usuarioId": 1,
       "id": "5200"
+    },
+    {
+      "id": "c8fe",
+      "titulo": "Spiderman2",
+      "director": "Hermanos Rusó",
+      "genero": "Crimen",
+      "anio": 2000,
+      "duracion": 2222222222222,
+      "sinopsis": "dvbnm,.-vbnm,",
+      "poster": "sdcfvbnm,.-",
+      "userId": "015f",
+      "usuarioId": "015f"
     }
   ]
 }

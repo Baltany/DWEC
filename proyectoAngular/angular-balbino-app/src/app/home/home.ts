@@ -121,4 +121,22 @@ export class HomeComponent implements OnInit {
       alert('No tienes permisos de administrador');
     }
   }
+  
+  logout(): void {
+    if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+      console.log('🚪 Cerrando sesión...');
+      
+      // Llamar al método logout del AuthService
+      this.authService.logout();
+      
+      // Redireccionar al login
+      this.router.navigate(['/login']).then(() => {
+        console.log('✅ Sesión cerrada correctamente');
+      }).catch((error) => {
+        console.error('❌ Error al redireccionar:', error);
+      });
+    }
+  }
+
+
 }

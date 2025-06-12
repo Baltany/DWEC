@@ -3,16 +3,30 @@
     <h1>Bienvenido, {{ usuario?.nombre }}!</h1>
     <div class="user-info">
       <span class="role-badge" [class]="usuario?.rol">{{ usuario?.rol?.toUpperCase() }}</span>
+
+
     </div>
   </div>
 
   <!-- Panel de Admin -->
-  <div *ngIf="authService.isAdmin()" class="admin-panel">
-    <button class="btn-admin" (click)="irADashboardAdmin()">
-      <i class="icon">👨‍💼</i>
-      Dashboard Admin
-    </button>
-  </div>
+<div class="admin-panel">
+    <div *ngIf="authService.isAdmin()">
+        <button class="btn-admin" (click)="irADashboardAdmin()">
+            <i class="icon">👨‍💼</i>
+            Dashboard Admin
+        </button>
+    </div>
+
+    <div>
+        <button class="btn-admin" (click)="logout()" title="Cerrar Sesión">
+            <i class="icon">🚪</i>
+            Cerrar Sesión
+        </button>
+    </div>
+
+</div>
+
+
 
   <!-- Sección de Películas -->
   <div class="movies-section">
