@@ -91,8 +91,23 @@ export class HomeComponent implements OnInit {
   }
 
   irADashboardAdmin(): void {
+    console.log('🔍 Botón Dashboard Admin clickeado');
+    console.log('🔍 Usuario actual:', this.usuario);
+    console.log('🔍 Es admin?', this.authService.isAdmin());
+    
     if (this.authService.isAdmin()) {
-      this.router.navigate(['/admin/dashboard']);
+      console.log('✅ Usuario es admin, navegando...');
+      this.router.navigate(['/admin/dashboard']).then(
+        (success) => {
+          console.log('✅ Navegación exitosa:', success);
+          console.log('✅ URL actual:', this.router.url);
+        }
+      ).catch((error) => {
+        console.error('❌ Error en navegación:', error);
+      });
+    } else {
+      console.log('❌ Usuario NO es admin');
+      alert('No tienes permisos de administrador');
     }
   }
 }

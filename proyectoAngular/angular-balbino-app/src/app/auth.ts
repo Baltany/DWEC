@@ -67,7 +67,13 @@ export class AuthService { // ✅ Ya está exportado
 
   isAdmin(): boolean {
     const user = this.getCurrentUser();
-    return user?.rol === 'admin';
+    console.log('🔍 Verificando si es admin:', user);
+    console.log('🔍 Rol del usuario:', user?.rol);
+    
+    const esAdmin = user?.rol === 'admin';
+    console.log('🔍 Resultado isAdmin():', esAdmin);
+    
+    return esAdmin;
   }
 
   isCliente(): boolean {

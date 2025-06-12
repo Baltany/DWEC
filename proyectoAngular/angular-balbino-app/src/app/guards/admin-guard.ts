@@ -1,16 +1,31 @@
-import { CanActivateFn } from '@angular/router';
-import { inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService } from '../auth';
+// guards/admin-guard.ts
+import { Injectable } from '@angular/core';
+import { CanActivate, Router } from '@angular/router';
+import { AuthService } from '../auth'; 
 
-export const adminGuard: CanActivateFn = (route, state) => {
-  const authService = inject(AuthService);
-  const router = inject(Router);
+@Injectable({
+  providedIn: 'root'
+})
+export class AdminGuard implements CanActivate {
+  
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
-  if (authService.isAdmin()) {
-    return true;
-  } else {
-    router.navigate(['/home']);
+  canActivate(): boolean {
+    console.log('🔒 AdminGuard: Verificando acceso...');
+    
+    const esAdmin = this.authService.isAdmin();
+    console.log('🔒 AdminGuard: Es admin?', esAdmin);
+    
+    if (esAdmin) {
+      console.log('✅ AdminGuard: Acceso permitido');
+      return true;
+    }
+    
+    console.log('❌ AdminGuard: Acceso denegado, redirigiendo a home');
+    this.router.navigate(['/home']);
     return false;
   }
-};
+}

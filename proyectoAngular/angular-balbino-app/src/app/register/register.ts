@@ -23,7 +23,7 @@ export class RegisterComponent {
     private router: Router
   ) {
     this.registerForm = this.fb.group({
-      nombre: ['', Validators.required], // ✅ nombre, no name
+      nombre: ['', Validators.required], 
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
@@ -38,8 +38,8 @@ export class RegisterComponent {
     this.isLoading = true;
     this.errorMessage = '';
 
-    const userData: Usuario = { // ✅ Tipado correcto
-      nombre: this.registerForm.get('nombre')?.value, // ✅ usando registerForm
+    const userData: Usuario = { 
+      nombre: this.registerForm.get('nombre')?.value, 
       email: this.registerForm.get('email')?.value,
       password: this.registerForm.get('password')?.value,
       rol: 'cliente'
@@ -48,7 +48,7 @@ export class RegisterComponent {
     console.log('Datos a registrar:', userData);
 
     this.authService.register(userData).subscribe({
-      next: (success: boolean) => { // ✅ Tipado correcto
+      next: (success: boolean) => { 
         if (success) {
           console.log('✅ Registro exitoso');
           this.router.navigate(['/home']);
@@ -57,7 +57,7 @@ export class RegisterComponent {
         }
         this.isLoading = false;
       },
-      error: (err: any) => { // ✅ Tipado error
+      error: (err: any) => { 
         console.error('❌ Error en registro:', err);
         this.errorMessage = 'Error en el servidor. Intenta nuevamente.';
         this.isLoading = false;

@@ -20,14 +20,6 @@
       "email": "bmoylop0903@g.educaand.es",
       "password": "123456",
       "rol": "cliente"
-    },
-    {
-      "id": "e16a",
-      "nombre": "prueba",
-      "email": "prueba@prueba.com",
-      "password": "prueba",
-      "rol": "cliente",
-      "fechaCreacion": "2025-06-11T20:06:59.403Z"
     }
   ],
   "peliculas": [

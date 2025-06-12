@@ -74,7 +74,6 @@ import { AuthService } from '../../auth';
                 <th>Nombre</th>
                 <th>Email</th>
                 <th>Rol</th>
-                <th>Fecha Creación</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -88,7 +87,6 @@ import { AuthService } from '../../auth';
                     {{ usuario.rol?.toUpperCase() }}
                   </span>
                 </td>
-                <td>{{ formatearFecha(usuario.fechaCreacion) }}</td>
                 <td>
                   <div class="action-buttons">
                     <button class="btn-edit" (click)="editarUsuario(usuario.id!)">
@@ -507,6 +505,9 @@ export class DashboardAdminComponent implements OnInit {
   loadingUsuarios = true;
   loadingPeliculas = true;
   currentUserId: number;
+  usuarioSeleccionado: Usuario | null = null;
+  modoEdicion = false;
+  modoCreacion = false;
 
   // Estadísticas
   totalUsuarios = 0;
@@ -514,10 +515,19 @@ export class DashboardAdminComponent implements OnInit {
   totalClientes = 0;
   totalAdmins = 0;
 
+  usuarioForm: Usuario = {
+    id: 0,
+    nombre: '',
+    email: '',
+    password: '',
+    rol: 'cliente'
+  };
+
+
   constructor(
     private usuarioService: UsuarioService,
     private peliculaService: PeliculaService,
-    private authService: AuthService,
+    public authService: AuthService,
     private router: Router
   ) {
     this.currentUserId = this.authService.getCurrentUser()?.id || 0;
@@ -529,13 +539,13 @@ export class DashboardAdminComponent implements OnInit {
   }
 
   cargarUsuarios(): void {
+    this.loadingUsuarios = true;
     this.usuarioService.getUsuarios().subscribe({
-      next: (usuarios: Usuario[]) => {
+      next: (usuarios) => {
         this.usuarios = usuarios;
-        this.calcularEstadisticasUsuarios();
         this.loadingUsuarios = false;
       },
-      error: (error: any) => {
+      error: (error) => {
         console.error('Error al cargar usuarios:', error);
         this.loadingUsuarios = false;
       }
@@ -562,10 +572,7 @@ export class DashboardAdminComponent implements OnInit {
     this.totalAdmins = this.usuarios.filter(u => u.rol === 'admin').length;
   }
 
-  formatearFecha(fecha?: string): string {
-    if (!fecha) return 'N/A';
-    return new Date(fecha).toLocaleDateString('es-ES');
-  }
+
 
   getUsuarioNombre(usuarioId?: number): string {
     if (!usuarioId) return 'N/A';
@@ -574,35 +581,83 @@ export class DashboardAdminComponent implements OnInit {
   }
 
   crearUsuario(): void {
-    // Implementar modal o redirigir a formulario
-    alert('Funcionalidad de crear usuario en desarrollo');
+    this.modoCreacion = true;
+    this.modoEdicion = false;
+    this.usuarioForm = {
+      id: 0,
+      nombre: '',
+      email: '',
+      password: '',
+      rol: 'cliente'
+    };
   }
 
   editarUsuario(id: number): void {
-    // Implementar edición de usuarios
-    alert(`Editar usuario ${id} - En desarrollo`);
-  }
-
-  eliminarUsuario(id: number): void {
-    if (id === this.currentUserId) {
-      alert('No puedes eliminar tu propio usuario');
-      return;
+    const usuario = this.usuarios.find(u => u.id === id);
+    if (usuario) {
+      this.modoEdicion = true;
+      this.modoCreacion = false;
+      this.usuarioForm = { ...usuario };
     }
-
-    if (confirm('¿Estás seguro de que quieres eliminar este usuario?')) {
-      this.usuarioService.eliminarUsuario(id).subscribe({
-        next: () => {
-          this.usuarios = this.usuarios.filter(u => u.id !== id);
-          this.calcularEstadisticasUsuarios();
-          alert('Usuario eliminado exitosamente');
+  }
+  guardarUsuario(): void {
+    if (this.modoCreacion) {
+      this.usuarioService.crearUsuario(this.usuarioForm).subscribe({
+        next: (nuevoUsuario) => {
+          this.usuarios.push(nuevoUsuario);
+          this.cancelarEdicion();
+          alert('Usuario creado exitosamente');
         },
-        error: (error: any) => {
-          console.error('Error al eliminar usuario:', error);
-          alert('Error al eliminar el usuario');
+        error: (error) => {
+          console.error('Error al crear usuario:', error);
+          alert('Error al crear usuario');
+        }
+      });
+    } else if (this.modoEdicion) {
+      this.usuarioService.actualizarUsuario(this.usuarioForm.id!, this.usuarioForm).subscribe({
+        next: (usuarioActualizado) => {
+          const index = this.usuarios.findIndex(u => u.id === usuarioActualizado.id);
+          if (index !== -1) {
+            this.usuarios[index] = usuarioActualizado;
+          }
+          this.cancelarEdicion();
+          alert('Usuario actualizado exitosamente');
+        },
+        error: (error) => {
+          console.error('Error al actualizar usuario:', error);
+          alert('Error al actualizar usuario');
         }
       });
     }
   }
+
+  eliminarUsuario(id: number): void {
+    if (confirm('¿Estás seguro de que quieres eliminar este usuario?')) {
+      this.usuarioService.eliminarUsuario(id).subscribe({
+        next: () => {
+          this.usuarios = this.usuarios.filter(u => u.id !== id);
+          alert('Usuario eliminado exitosamente');
+        },
+        error: (error) => {
+          console.error('Error al eliminar usuario:', error);
+          alert('Error al eliminar usuario');
+        }
+      });
+    }
+  }
+
+  cancelarEdicion(): void {
+    this.modoEdicion = false;
+    this.modoCreacion = false;
+    this.usuarioForm = {
+      id: 0,
+      nombre: '',
+      email: '',
+      password: '',
+      rol: 'cliente'
+    };
+  }
+
 
   crearPelicula(): void {
     this.router.navigate(['/peliculas/nueva']);

@@ -1,1 +1,224 @@
-<p>usuarios works!</p>
+<div class="usuarios-container">
+  <div class="header">
+    <h1>Gestión de Usuarios</h1>
+    <div class="header-actions">
+      <button class="btn-back" (click)="volverDashboard()">← Volver al Dashboard</button>
+      <button class="btn-primary" (click)="abrirModalCrear()">
+        <i class="icon">👤</i>
+        Nuevo Usuario
+      </button>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filters-section">
+    <div class="filter-group">
+      <label>Buscar por nombre o email:</label>
+      <input 
+        type="text" 
+        [(ngModel)]="filtroTexto" 
+        (input)="aplicarFiltros()"
+        placeholder="Buscar usuario..."
+        class="filter-input">
+    </div>
+    
+    <div class="filter-group">
+      <label>Filtrar por rol:</label>
+      <select [(ngModel)]="filtroRol" (change)="aplicarFiltros()" class="filter-select">
+        <option value="">Todos los roles</option>
+        <option value="admin">Administradores</option>
+        <option value="cliente">Clientes</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Estadísticas rápidas -->
+  <div class="stats-row">
+    <div class="stat-item">
+      <span class="stat-number">{{ usuariosFiltrados.length }}</span>
+      <span class="stat-label">Usuarios mostrados</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">{{ totalAdmins }}</span>
+      <span class="stat-label">Administradores</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">{{ totalClientes }}</span>
+      <span class="stat-label">Clientes</span>
+    </div>
+  </div>
+
+  <!-- Tabla de usuarios -->
+  <div class="table-section">
+    <div *ngIf="loading" class="loading">
+      <div class="spinner"></div>
+      <p>Cargando usuarios...</p>
+    </div>
+
+    <div *ngIf="!loading" class="table-container">
+      <table class="usuarios-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Rol</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let usuario of usuariosFiltrados; trackBy: trackByUsuario">
+            <td>{{ usuario.id }}</td>
+            <td>
+              <div class="user-cell">
+                <div class="user-avatar">
+                  {{ usuario.nombre.charAt(0).toUpperCase() }}
+                </div>
+                <span>{{ usuario.nombre }}</span>
+              </div>
+            </td>
+            <td>{{ usuario.email }}</td>
+            <td>
+              <span class="role-badge" [ngClass]="'role-' + usuario.rol">
+                {{ usuario.rol?.toUpperCase() }}
+              </span>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <button 
+                  class="btn-action btn-edit" 
+                  (click)="editarUsuario(usuario)"
+                  title="Editar usuario">
+                  <i class="icon">✏️</i>
+                </button>
+                <button 
+                  class="btn-action btn-delete" 
+                  (click)="confirmarEliminar(usuario)"
+                  [disabled]="usuario.id === currentUserId"
+                  [title]="usuario.id === currentUserId ? 'No puedes eliminar tu propio usuario' : 'Eliminar usuario'">
+                  <i class="icon">🗑️</i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div *ngIf="usuariosFiltrados.length === 0" class="no-results">
+        <div class="no-results-icon">🔍</div>
+        <h3>No se encontraron usuarios</h3>
+        <p>No hay usuarios que coincidan con los filtros aplicados.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para crear/editar usuario -->
+<div class="modal-overlay" *ngIf="mostrarModal" (click)="cerrarModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ modoEdicion ? 'Editar Usuario' : 'Crear Nuevo Usuario' }}</h2>
+      <button class="btn-close" (click)="cerrarModal()">×</button>
+    </div>
+
+    <form [formGroup]="usuarioForm" (ngSubmit)="guardarUsuario()" class="modal-form">
+      <div class="form-group">
+        <label for="nombre">Nombre completo *</label>
+        <input 
+          type="text" 
+          id="nombre" 
+          formControlName="nombre"
+          class="form-input"
+          [class.error]="usuarioForm.get('nombre')?.invalid && usuarioForm.get('nombre')?.touched">
+        <div class="error-message" *ngIf="usuarioForm.get('nombre')?.invalid && usuarioForm.get('nombre')?.touched">
+          El nombre es requerido
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email *</label>
+        <input 
+          type="email" 
+          id="email" 
+          formControlName="email"
+          class="form-input"
+          [class.error]="usuarioForm.get('email')?.invalid && usuarioForm.get('email')?.touched">
+        <div class="error-message" *ngIf="usuarioForm.get('email')?.invalid && usuarioForm.get('email')?.touched">
+          <span *ngIf="usuarioForm.get('email')?.errors?.['required']">El email es requerido</span>
+          <span *ngIf="usuarioForm.get('email')?.errors?.['email']">El formato del email no es válido</span>
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="!modoEdicion">
+        <label for="password">Contraseña *</label>
+        <input 
+          type="password" 
+          id="password" 
+          formControlName="password"
+          class="form-input"
+          [class.error]="usuarioForm.get('password')?.invalid && usuarioForm.get('password')?.touched">
+        <div class="error-message" *ngIf="usuarioForm.get('password')?.invalid && usuarioForm.get('password')?.touched">
+          La contraseña debe tener al menos 6 caracteres
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="rol">Rol *</label>
+        <select 
+          id="rol" 
+          formControlName="rol"
+          class="form-select"
+          [class.error]="usuarioForm.get('rol')?.invalid && usuarioForm.get('rol')?.touched">
+          <option value="">Seleccionar rol</option>
+          <option value="admin">Administrador</option>
+          <option value="cliente">Cliente</option>
+        </select>
+        <div class="error-message" *ngIf="usuarioForm.get('rol')?.invalid && usuarioForm.get('rol')?.touched">
+          Debe seleccionar un rol
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" (click)="cerrarModal()">
+          Cancelar
+        </button>
+        <button 
+          type="submit" 
+          class="btn-primary" 
+          [disabled]="usuarioForm.invalid || guardando">
+          <span *ngIf="guardando" class="loading-spinner"></span>
+          {{ guardando ? 'Guardando...' : (modoEdicion ? 'Actualizar' : 'Crear Usuario') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal de confirmación para eliminar -->
+<div class="modal-overlay" *ngIf="mostrarModalEliminar" (click)="cerrarModalEliminar()">
+  <div class="modal-content modal-confirm" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Confirmar Eliminación</h2>
+    </div>
+    
+    <div class="modal-body">
+      <div class="warning-icon">⚠️</div>
+      <p>¿Estás seguro de que quieres eliminar al usuario <strong>{{ usuarioAEliminar?.nombre }}</strong>?</p>
+      <p class="warning-text">Esta acción no se puede deshacer.</p>
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="btn-secondary" (click)="cerrarModalEliminar()">
+        Cancelar
+      </button>
+      <button 
+        type="button" 
+        class="btn-danger" 
+        (click)="eliminarUsuario()"
+        [disabled]="eliminando">
+        <span *ngIf="eliminando" class="loading-spinner"></span>
+        {{ eliminando ? 'Eliminando...' : 'Eliminar Usuario' }}
+      </button>
+    </div>
+  </div>
+</div>

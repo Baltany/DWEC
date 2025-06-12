@@ -37,9 +37,12 @@
     <div *ngIf="!loading && peliculas.length > 0" class="movies-grid">
       <div *ngFor="let pelicula of peliculas" class="movie-card">
         <div class="movie-poster">
-          <img [src]="pelicula.poster || '/assets/default-poster.jpg'" 
+          <!-- <img [src]="pelicula.poster || '/assets/default-poster.jpg'" 
                [alt]="pelicula.titulo" 
-               onerror="this.src='/assets/default-poster.jpg'">
+               onerror="this.src='/assets/default-poster.jpg'"> -->
+               <img [src]="pelicula.poster"
+               [alt]="pelicula.titulo">
+          
         </div>
         
         <div class="movie-info">
