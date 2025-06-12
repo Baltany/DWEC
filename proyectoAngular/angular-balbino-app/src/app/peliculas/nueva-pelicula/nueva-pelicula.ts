@@ -53,9 +53,9 @@ export class PeliculaFormComponent implements OnInit {
     this.loading = true;
     this.peliculaService.getPelicula(this.peliculaId).subscribe({
       next: (pelicula) => {
-        // Verificar si el usuario puede editar esta película
+        // Verificar si el usuario puede editar la peliclula
         if (!this.puedeEditarPelicula(pelicula)) {
-          alert('No tienes permisos para editar esta película');
+          alert('No tienes permisos para editar esta pelicula');
           this.router.navigate(['/home']);
           return;
         }
@@ -72,8 +72,8 @@ export class PeliculaFormComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error al cargar película:', error);
-        alert('Error al cargar la película');
+        console.error('Error al cargar pelicula:', error);
+        alert('Error al cargar la pelicula');
         this.router.navigate(['/home']);
         this.loading = false;
       }
@@ -96,28 +96,28 @@ export class PeliculaFormComponent implements OnInit {
     };
 
     if (this.isEditing && this.peliculaId) {
-      // Actualizar película existente
+      // Actualizar pelicula existente
       this.peliculaService.actualizarPelicula(this.peliculaId, peliculaData).subscribe({
         next: () => {
-          alert('Película actualizada exitosamente');
+          alert('Pelicula actualizada exitosamente');
           this.router.navigate(['/home']);
         },
         error: (error) => {
-          console.error('Error al actualizar película:', error);
-          alert('Error al actualizar la película');
+          console.error('Error al actualizar pelicula:', error);
+          alert('Error al actualizar la pelicula');
           this.submitting = false;
         }
       });
     } else {
-      // Crear nueva película
+      // Crear nueva pelicula
       this.peliculaService.crearPelicula(peliculaData).subscribe({
         next: () => {
-          alert('Película creada exitosamente');
+          alert('Pelicula creada exitosamente');
           this.router.navigate(['/home']);
         },
         error: (error) => {
-          console.error('Error al crear película:', error);
-          alert('Error al crear la película');
+          console.error('Error al crear pelicula:', error);
+          alert('Error al crear la pelicula');
           this.submitting = false;
         }
       });
@@ -133,7 +133,7 @@ export class PeliculaFormComponent implements OnInit {
     if (this.authService.isAdmin()) {
       return true; // Admin puede editar todas
     }
-    return pelicula.userId === currentUser?.id; // Cliente solo sus películas
+    return pelicula.userId === currentUser?.id; // Cliente solo sus peliculas
   }
 
   private markFormGroupTouched(): void {
@@ -142,7 +142,7 @@ export class PeliculaFormComponent implements OnInit {
     });
   }
 
-  // Getters para validación en el template
+  // Getters para validacion en el template
   get titulo() { return this.peliculaForm.get('titulo'); }
   get director() { return this.peliculaForm.get('director'); }
   get genero() { return this.peliculaForm.get('genero'); }

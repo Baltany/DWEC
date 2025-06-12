@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../auth';
-import { Usuario } from '../services/usuario'; // ✅ Importar Usuario
+import { Usuario } from '../services/usuario';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -50,7 +50,7 @@ export class RegisterComponent {
     this.authService.register(userData).subscribe({
       next: (success: boolean) => { 
         if (success) {
-          console.log('✅ Registro exitoso');
+          console.log('Registro exitoso');
           this.router.navigate(['/home']);
         } else {
           this.errorMessage = 'Error al registrar usuario';
@@ -58,7 +58,7 @@ export class RegisterComponent {
         this.isLoading = false;
       },
       error: (err: any) => { 
-        console.error('❌ Error en registro:', err);
+        console.error('Error en registro:', err);
         this.errorMessage = 'Error en el servidor. Intenta nuevamente.';
         this.isLoading = false;
       }

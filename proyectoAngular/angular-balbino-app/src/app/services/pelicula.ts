@@ -22,26 +22,25 @@ export class PeliculaService {
 
   constructor(private http: HttpClient) { }
 
-  // Obtener todas las películas
+  // Obtener todas las peliculas
   getPeliculas(): Observable<Pelicula[]> {
     return this.http.get<Pelicula[]>(this.apiUrl);
   }
 
-  // Obtener películas por usuario (compatible con userId y usuarioId)
+  // Obtener peliculas por usuario
   getPeliculasByUsuario(usuarioId: string) {
     return this.http.get<Pelicula[]>(`${this.apiUrl}?usuarioId=${usuarioId}`);
   }
 
 
 
-  // Obtener película por ID
+  // Obtener pelicula por ID
   getPelicula(id: string): Observable<Pelicula> {
     return this.http.get<Pelicula>(`${this.apiUrl}/${id}`);
   }
 
-  // Crear nueva película
+  // Crear nueva pelicula
   crearPelicula(pelicula: Pelicula): Observable<Pelicula> {
-    // Asegurar compatibilidad con tu estructura JSON actual
     const peliculaData = {
       ...pelicula,
       userId: pelicula.userId , 
@@ -50,9 +49,8 @@ export class PeliculaService {
     return this.http.post<Pelicula>(this.apiUrl, peliculaData);
   }
 
-  // Actualizar película
+  // Actualizar pelicula
   actualizarPelicula(id: string, pelicula: Pelicula): Observable<Pelicula> {
-    // Asegurar compatibilidad con tu estructura JSON actual
     const peliculaData = {
       ...pelicula,
       userId: pelicula.userId,
@@ -61,7 +59,7 @@ export class PeliculaService {
     return this.http.put<Pelicula>(`${this.apiUrl}/${id}`, peliculaData);
   }
 
-  // Eliminar película
+  // Eliminar pelicula
   eliminarPelicula(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }

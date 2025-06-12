@@ -14,14 +14,14 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   
-  // Rutas de administración - protegidas con AdminGuard
+  // Rutas de administracion - protegidas con AdminGuard
   { 
     path: 'admin/dashboard', 
     component: DashboardAdminComponent, 
     canActivate: [AuthGuard, AdminGuard] 
   },
   
-  // Rutas para películas 
+  // Rutas para peliculas 
 { 
     path: 'peliculas/nueva', 
     component: PeliculaFormComponent, 
