@@ -87,9 +87,12 @@ export class PeliculaFormComponent implements OnInit {
     }
 
     this.submitting = true;
+    const userId = this.authService.getCurrentUser()?.id;
+
     const peliculaData: Pelicula = {
       ...this.peliculaForm.value,
-      usuarioId: this.authService.getCurrentUser()?.id
+      userId,
+      usuarioId: userId
     };
 
     if (this.isEditing && this.peliculaId) {

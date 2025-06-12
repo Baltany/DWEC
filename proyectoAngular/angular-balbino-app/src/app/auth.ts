@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { UsuarioService, Usuario } from './services/usuario'; // Corregir ruta
+import { UsuarioService, Usuario } from './services/usuario'; 
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService { // ✅ Ya está exportado
+export class AuthService { 
   private currentUserSubject = new BehaviorSubject<Usuario | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
   public isLoggedIn$ = this.currentUser$.pipe(
@@ -31,7 +31,7 @@ export class AuthService { // ✅ Ya está exportado
         }
         return false;
       }),
-      catchError((error: any) => of(false)) // ✅ Tipado error
+      catchError((error: any) => of(false)) 
     );
   }
 
@@ -48,7 +48,7 @@ export class AuthService { // ✅ Ya está exportado
         }
         return false;
       }),
-      catchError((error: any) => of(false)) // ✅ Tipado error
+      catchError((error: any) => of(false)) 
     );
   }
 
@@ -84,6 +84,6 @@ export class AuthService { // ✅ Ya está exportado
 
 
 
-// ✅ IMPORTANTE: Exportar explícitamente
+
 export { AuthService as default };
 

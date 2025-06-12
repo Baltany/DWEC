@@ -47,11 +47,12 @@ export class HomeComponent implements OnInit {
       // Cliente ve solo sus películas
       const usuarioId = this.usuario?.id;
       if (usuarioId) {
-        this.peliculaService.getPeliculasByUsuario(usuarioId).subscribe({
+        this.peliculaService.getPeliculasByUsuario(String(usuarioId)).subscribe({
           next: (peliculas) => {
             // Filtrar películas del usuario actual (por si el endpoint no filtra correctamente)
             this.peliculas = peliculas.filter(pelicula => 
-            String(pelicula.userId) === String(usuarioId)            );
+              String(pelicula.userId) === String(usuarioId)
+            );
             this.loading = false;
           },
           error: (error) => {

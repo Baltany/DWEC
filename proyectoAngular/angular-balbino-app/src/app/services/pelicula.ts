@@ -11,7 +11,7 @@ export interface Pelicula {
   duracion: number;
   sinopsis: string;
   poster?: string;
-  userId?: string; 
+  userId?: string | number; 
 }
 
 @Injectable({
@@ -28,10 +28,11 @@ export class PeliculaService {
   }
 
   // Obtener películas por usuario (compatible con userId y usuarioId)
-  getPeliculasByUsuario(usuarioId: string | number): Observable<Pelicula[]> {
-    // Intenta con ambos parámetros para compatibilidad
-    return this.http.get<Pelicula[]>(`${this.apiUrl}?userId=${usuarioId}&usuarioId=${usuarioId}`);
+  getPeliculasByUsuario(usuarioId: string) {
+    return this.http.get<Pelicula[]>(`${this.apiUrl}?usuarioId=${usuarioId}`);
   }
+
+
 
   // Obtener película por ID
   getPelicula(id: string): Observable<Pelicula> {

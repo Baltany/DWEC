@@ -206,11 +206,11 @@ import { AuthService } from '../../auth';
               <h4>{{ pelicula.titulo }}</h4>
               <p><strong>Director:</strong> {{ pelicula.director }}</p>
               <p><strong>Año:</strong> {{ pelicula.anio }} | <strong>Género:</strong> {{ pelicula.genero }}</p>
-              <p><strong>Creado por:</strong> {{ getUsuarioNombre(pelicula.usuarioId) }}</p>
+              <p><strong>Creado por:</strong> {{ getUsuarioNombre(pelicula.userId) }}</p>
             </div>
             
             <div class="movie-actions-admin">
-              <button class="btn-edit-small" (click)="editarPelicula(pelicula.id!)">
+              <button class="btn-edit-small" (click)="editarPelicula(pelicula.id!.toString())">
                 ✏️
               </button>
               <button class="btn-delete-small" (click)="eliminarPelicula(pelicula.id!)">
@@ -796,7 +796,7 @@ export class DashboardAdminComponent implements OnInit {
     this.totalAdmins = this.usuarios.filter(u => u.rol === 'admin').length;
   }
 
-  getUsuarioNombre(usuarioId?: number): string {
+  getUsuarioNombre(usuarioId?: string | number): string {
     if (!usuarioId) return 'N/A';
     const usuario = this.usuarios.find(u => u.id === usuarioId);
     return usuario?.nombre || 'Usuario no encontrado';
@@ -904,7 +904,7 @@ export class DashboardAdminComponent implements OnInit {
     this.router.navigate(['/peliculas/nueva']);
   }
 
-  editarPelicula(id: number): void {
+  editarPelicula(id: string | number): void {
     this.router.navigate(['/peliculas/editar', id]);
   }
 

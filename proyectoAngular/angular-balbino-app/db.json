@@ -17,8 +17,7 @@
     {
       "id": "15",
       "nombre": "Pedro",
-      "email": "parra@parra.com",
-      "password": "hola?",
+      "email": "pdewfrgetarra@parra.com",
       "rol": "cliente"
     }
   ],
@@ -34,15 +33,16 @@
       "id": "4755"
     },
     {
-      "id": "741d",
-      "titulo": "BalbinoMoyanoCv",
+      "titulo": "dsrgdtfyguhijokp",
       "director": "Hermanos Rusó",
-      "genero": "Documental",
+      "genero": "Drama",
       "anio": 2000,
       "duracion": 34565768,
-      "sinopsis": "er5t6y7u89i0o'p`",
+      "sinopsis": "defrdgtfyg",
       "poster": "aSADFGHJK",
-      "usuarioId": 1
+      "userId": 1,
+      "usuarioId": 1,
+      "id": "5200"
     }
   ]
 }
