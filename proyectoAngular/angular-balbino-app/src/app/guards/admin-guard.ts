@@ -14,17 +14,17 @@ export class AdminGuard implements CanActivate {
   ) {}
 
   canActivate(): boolean {
-    console.log('🔒 AdminGuard: Verificando acceso...');
+    console.log('AdminGuard: Verificando acceso...');
     
     const esAdmin = this.authService.isAdmin();
-    console.log('🔒 AdminGuard: Es admin?', esAdmin);
+    console.log('AdminGuard: Es admin?', esAdmin);
     
     if (esAdmin) {
-      console.log('✅ AdminGuard: Acceso permitido');
+      console.log('AdminGuard: Acceso permitido');
       return true;
     }
     
-    console.log('❌ AdminGuard: Acceso denegado, redirigiendo a home');
+    console.log('AdminGuard: Acceso denegado, redirigiendo a home');
     this.router.navigate(['/home']);
     return false;
   }
