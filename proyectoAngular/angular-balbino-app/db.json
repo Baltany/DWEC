@@ -19,8 +19,7 @@
       "nombre": "Pedro",
       "email": "parra@parra.com",
       "password": "hola?",
-      "rol": "cliente",
-      "fechaCreacion": "2025-06-12T11:18:25.196Z"
+      "rol": "cliente"
     }
   ],
   "peliculas": [

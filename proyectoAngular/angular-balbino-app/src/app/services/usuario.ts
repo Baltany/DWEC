@@ -34,10 +34,11 @@ export class UsuarioService {
     // Crear nuevo usuario
     crearUsuario(usuario : Usuario): Observable<Usuario> {
         const nuevoUsuario = {
-            ...usuario,
-            fechaCreacion: new Date().toISOString()
+            ...usuario
         };
+        delete nuevoUsuario.id;
         return this.http.post<Usuario>(this.apiUrl, nuevoUsuario);
+
     }
 
     // Actualizar usuario
