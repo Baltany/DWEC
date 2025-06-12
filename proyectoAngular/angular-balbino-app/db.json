@@ -24,22 +24,25 @@
   ],
   "peliculas": [
     {
-      "id": 1,
-      "titulo": "El Padrino",
-      "director": "Francis Ford Coppola",
-      "anio": 1972,
-      "genero": "Drama",
-      "descripcion": "Una familia de la mafia italiana en Nueva York",
-      "userId": "015f"
+      "titulo": "Spiderman",
+      "director": "Hermanos Rusó",
+      "genero": "Crimen",
+      "anio": 2000,
+      "duracion": 41,
+      "sinopsis": "123456789erwet",
+      "poster": "sin foto",
+      "id": "4755"
     },
     {
-      "id": 2,
-      "titulo": "Pulp Fiction",
-      "director": "Quentin Tarantino",
-      "anio": 1994,
-      "genero": "Crimen",
-      "descripcion": "Historias entrelazadas del crimen de Los Ángeles",
-      "userId": "015f"
+      "id": "741d",
+      "titulo": "BalbinoMoyanoCv",
+      "director": "Hermanos Rusó",
+      "genero": "Documental",
+      "anio": 2000,
+      "duracion": 34565768,
+      "sinopsis": "er5t6y7u89i0o'p`",
+      "poster": "aSADFGHJK",
+      "usuarioId": 1
     }
   ]
 }

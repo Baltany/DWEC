@@ -1,106 +1,185 @@
-<div class="nueva-pelicula-container">
-    <div class="header">
-        <button class="btn-back" routerLink="/home">
-            ← Volver al inicio
-        </button>
-        <h1>Nueva Película</h1>
-        <p>Agrega una nueva película a tu colección</p>
+<div class="form-container">
+    <div class="form-header">
+        <h1>{{ isEditing ? 'Editar Película' : 'Nueva Película' }}</h1>
+        <div class="breadcrumb">
+            <span (click)="onCancel()" class="breadcrumb-link">Home</span>
+            <span class="breadcrumb-separator">></span>
+            <span>{{ isEditing ? 'Editar' : 'Nueva' }}
+                Película</span>
+        </div>
     </div>
 
-    <form [formGroup]="peliculaForm" (ngSubmit)="onSubmit()" class="pelicula-form">
+    <!-- Loading -->
+    <div *ngIf="loading" class="loading">
+        <div class="spinner"></div>
+        <p>Cargando película...</p>
+    </div>
 
-        <!-- Título -->
-        <div class="form-group">
-            <label for="titulo">Título *</label>
-            <input
-                id="titulo"
-                type="text"
-                formControlName="titulo"
-                placeholder="Ej: El Padrino"
-                [class.error]="peliculaForm.get('titulo')?.invalid && peliculaForm.get('titulo')?.touched">
-                <div class="error-message" *ngIf="getFieldError('titulo')">
-                    {{ getFieldError('titulo') }}
-                </div>
-            </div>
+    <!-- Formulario -->
+    <div *ngIf="!loading" class="form-wrapper">
+        <form [formGroup]="peliculaForm" (ngSubmit)="onSubmit()" class="pelicula-form">
 
-            <!-- Director -->
+            <!-- Título -->
             <div class="form-group">
-                <label for="director">Director *</label>
+                <label for="titulo" class="form-label">
+                    Título
+                    <span class="required">*</span>
+                </label>
                 <input
-                    id="director"
+                    id="titulo"
                     type="text"
-                    formControlName="director"
-                    placeholder="Ej: Francis Ford Coppola"
-                    [class.error]="peliculaForm.get('director')?.invalid && peliculaForm.get('director')?.touched">
-                    <div class="error-message" *ngIf="getFieldError('director')">
-                        {{ getFieldError('director') }}
+                    formControlName="titulo"
+                    class="form-input"
+                    [class.error]="titulo?.invalid && titulo?.touched"
+                    placeholder="Ingresa el título de la película">
+                    <div *ngIf="titulo?.invalid && titulo?.touched" class="error-message">
+                        <span *ngIf="titulo?.errors?.['required']">El título es obligatorio</span>
                     </div>
                 </div>
 
-                <!-- Año y Género en la misma fila -->
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="anio">Año *</label>
-                        <input
-                            id="anio"
-                            type="number"
-                            formControlName="anio"
-                            placeholder="2024"
-                            [class.error]="peliculaForm.get('anio')?.invalid && peliculaForm.get('anio')?.touched">
-                            <div class="error-message" *ngIf="getFieldError('anio')">
-                                {{ getFieldError('anio') }}
-                            </div>
+                <!-- Director -->
+                <div class="form-group">
+                    <label for="director" class="form-label">
+                        Director
+                        <span class="required">*</span>
+                    </label>
+                    <input
+                        id="director"
+                        type="text"
+                        formControlName="director"
+                        class="form-input"
+                        [class.error]="director?.invalid && director?.touched"
+                        placeholder="Nombre del director">
+                        <div *ngIf="director?.invalid && director?.touched" class="error-message">
+                            <span *ngIf="director?.errors?.['required']">El director es obligatorio</span>
                         </div>
+                    </div>
 
+                    <!-- Género -->
+                    <div class="form-group">
+                        <label for="genero" class="form-label">
+                            Género
+                            <span class="required">*</span>
+                        </label>
+                        <select
+                            id="genero"
+                            formControlName="genero"
+                            class="form-select"
+                            [class.error]="genero?.invalid && genero?.touched">
+                            <option value="">Selecciona un género</option>
+                            <option value="Acción">Acción</option>
+                            <option value="Aventura">Aventura</option>
+                            <option value="Comedia">Comedia</option>
+                            <option value="Drama">Drama</option>
+                            <option value="Terror">Terror</option>
+                            <option value="Ciencia Ficción">Ciencia Ficción</option>
+                            <option value="Romance">Romance</option>
+                            <option value="Thriller">Thriller</option>
+                            <option value="Animación">Animación</option>
+                            <option value="Documental">Documental</option>
+                            <option value="Crimen">Crimen</option>
+                            <option value="Fantasía">Fantasía</option>
+                        </select>
+                        <div *ngIf="genero?.invalid && genero?.touched" class="error-message">
+                            <span *ngIf="genero?.errors?.['required']">El género es obligatorio</span>
+                        </div>
+                    </div>
+
+                    <!-- Año y Duración en la misma fila -->
+                    <div class="form-row">
                         <div class="form-group">
-                            <label for="genero">Género *</label>
-                            <select
-                                id="genero"
-                                formControlName="genero"
-                                [class.error]="peliculaForm.get('genero')?.invalid && peliculaForm.get('genero')?.touched">
-                                <option value="">Selecciona un género</option>
-                                <option *ngFor="let genero of generos" [value]="genero">
-                                    {{ genero }}
-                                </option>
-                            </select>
-                            <div class="error-message" *ngIf="getFieldError('genero')">
-                                {{ getFieldError('genero') }}
+                            <label for="anio" class="form-label">
+                                Año
+                                <span class="required">*</span>
+                            </label>
+                            <input
+                                id="anio"
+                                type="number"
+                                formControlName="anio"
+                                class="form-input"
+                                [class.error]="anio?.invalid && anio?.touched"
+                                placeholder="2024"
+                                min="1900"
+                                [max]="2030">
+                                <div *ngIf="anio?.invalid && anio?.touched" class="error-message">
+                                    <span *ngIf="anio?.errors?.['required']">El año es obligatorio</span>
+                                    <span *ngIf="anio?.errors?.['min']">El año debe ser mayor a 1900</span>
+                                    <span *ngIf="anio?.errors?.['max']">El año no puede ser mayor a 2030</span>
+                                </div>
                             </div>
+
+                            <div class="form-group">
+                                <label for="duracion" class="form-label">
+                                    Duración (minutos)
+                                    <span class="required">*</span>
+                                </label>
+                                <input
+                                    id="duracion"
+                                    type="number"
+                                    formControlName="duracion"
+                                    class="form-input"
+                                    [class.error]="duracion?.invalid && duracion?.touched"
+                                    placeholder="120"
+                                    min="1">
+                                    <div *ngIf="duracion?.invalid && duracion?.touched" class="error-message">
+                                        <span *ngIf="duracion?.errors?.['required']">La duración es obligatoria</span>
+                                        <span *ngIf="duracion?.errors?.['min']">La duración debe ser mayor a 0</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Poster URL -->
+                            <div class="form-group">
+                                <label for="poster" class="form-label">
+                                    URL del Poster
+                                </label>
+                                <input
+                                    id="poster"
+                                    type="url"
+                                    formControlName="poster"
+                                    class="form-input"
+                                    placeholder="https://ejemplo.com/poster.jpg">
+                                    <small class="form-help">URL de la imagen del poster (opcional)</small>
+                                </div>
+
+                                <!-- Sinopsis -->
+                                <div class="form-group">
+                                    <label for="sinopsis" class="form-label">
+                                        Sinopsis
+                                        <span class="required">*</span>
+                                    </label>
+                                    <textarea
+                                        id="sinopsis"
+                                        formControlName="sinopsis"
+                                        class="form-textarea"
+                                        [class.error]="sinopsis?.invalid && sinopsis?.touched"
+                                        placeholder="Describe brevemente la trama de la película..."
+                                        rows="4"></textarea>
+                                    <div *ngIf="sinopsis?.invalid && sinopsis?.touched" class="error-message">
+                                        <span *ngIf="sinopsis?.errors?.['required']">La sinopsis es obligatoria</span>
+                                        <span *ngIf="sinopsis?.errors?.['minlength']">La sinopsis debe tener al menos 10 caracteres</span>
+                                    </div>
+                                </div>
+
+                                <!-- Botones -->
+                                <div class="form-actions">
+                                    <button
+                                        type="button"
+                                        class="btn-secondary"
+                                        (click)="onCancel()"
+                                        [disabled]="submitting">
+                                        Cancelar
+                                    </button>
+
+                                    <button
+                                        type="submit"
+                                        class="btn-primary"
+                                        [disabled]="peliculaForm.invalid || submitting">
+                                        <span *ngIf="submitting" class="spinner-small"></span>
+                                        {{ submitting ? 'Guardando...' : (isEditing ? 'Actualizar' : 'Crear') }}
+                                    </button>
+                                </div>
+
+                            </form>
                         </div>
                     </div>
-
-                    <!-- Descripción -->
-                    <div class="form-group">
-                        <label for="descripcion">Descripción *</label>
-                        <textarea
-                            id="descripcion"
-                            formControlName="descripcion"
-                            placeholder="Escribe una breve descripción de la película..."
-                            rows="4"
-                            [class.error]="peliculaForm.get('descripcion')?.invalid && peliculaForm.get('descripcion')?.touched"></textarea>
-                        <div class="error-message" *ngIf="getFieldError('descripcion')">
-                            {{ getFieldError('descripcion') }}
-                        </div>
-                    </div>
-
-                    <!-- Botones -->
-                    <div class="form-actions">
-                        <button
-                            type="button"
-                            class="btn btn-secondary"
-                            routerLink="/home"
-                            [disabled]="loading">
-                            Cancelar
-                        </button>
-
-                        <button
-                            type="submit"
-                            class="btn btn-primary"
-                            [disabled]="peliculaForm.invalid || loading">
-                            <span *ngIf="loading">Guardando...</span>
-                            <span *ngIf="!loading">🎬 Crear Película</span>
-                        </button>
-                    </div>
-
-                </form>
-            </div>

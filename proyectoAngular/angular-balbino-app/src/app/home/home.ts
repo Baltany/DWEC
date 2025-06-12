@@ -49,7 +49,9 @@ export class HomeComponent implements OnInit {
       if (usuarioId) {
         this.peliculaService.getPeliculasByUsuario(usuarioId).subscribe({
           next: (peliculas) => {
-            this.peliculas = peliculas;
+            // Filtrar películas del usuario actual (por si el endpoint no filtra correctamente)
+            this.peliculas = peliculas.filter(pelicula => 
+            String(pelicula.userId) === String(usuarioId)            );
             this.loading = false;
           },
           error: (error) => {
@@ -57,7 +59,11 @@ export class HomeComponent implements OnInit {
             this.loading = false;
           }
         });
+      } else {
+        this.loading = false;
       }
+    } else {
+      this.loading = false;
     }
   }
 
@@ -65,15 +71,16 @@ export class HomeComponent implements OnInit {
     this.router.navigate(['/peliculas/nueva']);
   }
 
-  editarPelicula(id: number): void {
+  editarPelicula(id: string): void {
     this.router.navigate(['/peliculas/editar', id]);
   }
 
-  eliminarPelicula(id: number): void {
+  eliminarPelicula(id: string): void {
     if (confirm('¿Estás seguro de que quieres eliminar esta película?')) {
       this.peliculaService.eliminarPelicula(id).subscribe({
         next: () => {
           this.peliculas = this.peliculas.filter(p => p.id !== id);
+          alert('Película eliminada correctamente');
         },
         error: (error) => {
           console.error('Error al eliminar película:', error);
@@ -87,8 +94,11 @@ export class HomeComponent implements OnInit {
     if (this.authService.isAdmin()) {
       return true; // Admin puede editar todas
     }
-    return pelicula.usuarioId === this.usuario?.id; // Cliente solo sus películas
+    // Verificar tanto userId como usuarioId para compatibilidad
+    const currentUserId = this.usuario?.id;
+    return pelicula.userId === currentUserId;
   }
+
 
   irADashboardAdmin(): void {
     console.log('🔍 Botón Dashboard Admin clickeado');

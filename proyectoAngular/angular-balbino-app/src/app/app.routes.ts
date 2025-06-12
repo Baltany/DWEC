@@ -5,6 +5,8 @@ import { RegisterComponent } from './register/register';
 import { DashboardAdminComponent } from './admin/dashboard-admin/dashboard-admin';
 import { AuthGuard } from './guards/auth-guard';
 import { AdminGuard } from './guards/admin-guard';
+import { PeliculaFormComponent } from './peliculas/nueva-pelicula/nueva-pelicula';
+
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' }, 
@@ -19,9 +21,17 @@ export const routes: Routes = [
     canActivate: [AuthGuard, AdminGuard] 
   },
   
-  // Rutas para películas (si las tienes)
-  // { path: 'peliculas/nueva', component: NuevaPeliculaComponent, canActivate: [AuthGuard] },
-  // { path: 'peliculas/editar/:id', component: EditarPeliculaComponent, canActivate: [AuthGuard] },
+  // Rutas para películas 
+{ 
+    path: 'peliculas/nueva', 
+    component: PeliculaFormComponent, 
+    canActivate: [AuthGuard] 
+  },
+  { 
+    path: 'peliculas/editar/:id', 
+    component: PeliculaFormComponent, 
+    canActivate: [AuthGuard] 
+  },
   
   { path: '**', redirectTo: '/home' } 
 ];

@@ -908,7 +908,7 @@ export class DashboardAdminComponent implements OnInit {
     this.router.navigate(['/peliculas/editar', id]);
   }
 
-  eliminarPelicula(id: number): void {
+  eliminarPelicula(id: string): void {
     if (confirm('¿Estás seguro de que quieres eliminar esta película?')) {
       this.peliculaService.eliminarPelicula(id).subscribe({
         next: () => {
