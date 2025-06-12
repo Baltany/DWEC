@@ -821,7 +821,8 @@ export class DashboardAdminComponent implements OnInit {
       this.modoCreacion = false;
       this.usuarioForm = { 
         ...usuario,
-        password: '' // No mostrar la contraseña en el formulario de edición
+        password: '' 
+        // No mostrar la contraseña en el formulario de edición
       };
     }
   }

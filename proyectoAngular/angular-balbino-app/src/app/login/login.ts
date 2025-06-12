@@ -45,7 +45,7 @@ export class LoginComponent {
     console.log('Llamando al AuthService.login()...');
 
     this.authService.login(email, password).subscribe({
-    next: (loginSuccess: boolean) => { // ✅ Tipado correcto
+    next: (loginSuccess: boolean) => {
       console.log('RESPUESTA del AuthService (boolean):', loginSuccess);
       
       if (loginSuccess) {
@@ -62,13 +62,13 @@ export class LoginComponent {
           }
         );
       } else {
-        console.log('❌ Login fallido');
+        console.log('Login fallido');
         this.errorMessage = 'Credenciales incorrectas';
       }
       this.isLoading = false;
     },
-    error: (error: any) => { // ✅ Tipado error
-      console.error('❌ ERROR en el login:', error);
+    error: (error: any) => { 
+      console.error('ERROR en el login:', error);
       this.errorMessage = 'Error en el servidor. Intenta nuevamente.';
       this.isLoading = false;
     }

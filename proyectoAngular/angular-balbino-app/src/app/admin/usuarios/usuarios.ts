@@ -110,7 +110,7 @@ export class UsuariosComponent implements OnInit {
   abrirModalCrear(): void {
     this.modoEdicion = false;
     this.usuarioForm = this.createForm();
-    // En modo creación, la contraseña es requerida
+
     this.usuarioForm.get('password')?.setValidators([Validators.required, Validators.minLength(6)]);
     this.usuarioForm.get('password')?.updateValueAndValidity();
     this.mostrarModal = true;
@@ -120,7 +120,6 @@ export class UsuariosComponent implements OnInit {
     this.modoEdicion = true;
     this.usuarioForm = this.createForm();
     
-    // En modo edición, la contraseña no es requerida
     this.usuarioForm.get('password')?.setValidators([Validators.minLength(6)]);
     this.usuarioForm.get('password')?.updateValueAndValidity();
     
@@ -156,7 +155,7 @@ export class UsuariosComponent implements OnInit {
         ...datosUsuario
       };
       
-      // Si no se proporcionó contraseña, no la incluir en la actualización
+      // Si no se proporciono contrasenia, no la incluir en la actualizacion
       if (!datosUsuario.password) {
         delete usuarioActualizado.password;
       }
@@ -247,13 +246,10 @@ export class UsuariosComponent implements OnInit {
   }
 
   private mostrarExito(mensaje: string): void {
-    // Aquí puedes implementar un sistema de notificaciones
-    // Por ahora usamos alert, pero puedes cambiarlo por un toast o snackbar
     alert(mensaje);
   }
 
   private mostrarError(mensaje: string): void {
-    // Aquí puedes implementar un sistema de notificaciones
     alert(mensaje);
   }
 }

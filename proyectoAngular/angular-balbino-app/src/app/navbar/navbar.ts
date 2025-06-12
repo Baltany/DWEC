@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../auth'; // Ajusta la ruta según tu estructura
+import { AuthService } from '../auth'; 
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.html',
-  styleUrls: ['./navbar.css'] // Si tienes estilos
+  styleUrls: ['./navbar.css'] 
 })
 export class NavbarComponent implements OnInit {
   isLoggedIn = false;
-  currentUser: any = null; // Aquí está la propiedad que faltaba
+  currentUser: any = null; 
 
   constructor(
     public authService: AuthService,
@@ -17,7 +17,6 @@ export class NavbarComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Suscribirse al estado de autenticación
     this.authService.isLoggedIn$.subscribe(
       (loggedIn) => {
         this.isLoggedIn = loggedIn;

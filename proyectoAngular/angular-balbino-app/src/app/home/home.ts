@@ -32,7 +32,7 @@ export class HomeComponent implements OnInit {
     this.loading = true;
     
     if (this.authService.isAdmin()) {
-      // Admin ve todas las películas
+      // Admin ve todas las peliculas de todos los usuarios
       this.peliculaService.getPeliculas().subscribe({
         next: (peliculas) => {
           this.peliculas = peliculas;
@@ -44,19 +44,19 @@ export class HomeComponent implements OnInit {
         }
       });
     } else if (this.authService.isCliente()) {
-      // Cliente ve solo sus películas
+      // Cliente ve solo sus peliculas
       const usuarioId = this.usuario?.id;
       if (usuarioId) {
         this.peliculaService.getPeliculasByUsuario(String(usuarioId)).subscribe({
           next: (peliculas) => {
-            // Filtrar películas del usuario actual (por si el endpoint no filtra correctamente)
+            // Filtrar peliculas del usuario actual 
             this.peliculas = peliculas.filter(pelicula => 
               String(pelicula.userId) === String(usuarioId)
             );
             this.loading = false;
           },
           error: (error) => {
-            console.error('Error al cargar películas:', error);
+            console.error('Error al cargar peliculas:', error);
             this.loading = false;
           }
         });
@@ -77,15 +77,15 @@ export class HomeComponent implements OnInit {
   }
 
   eliminarPelicula(id: string): void {
-    if (confirm('¿Estás seguro de que quieres eliminar esta película?')) {
+    if (confirm('¿Estás seguro de que quieres eliminar esta pelicula?')) {
       this.peliculaService.eliminarPelicula(id).subscribe({
         next: () => {
           this.peliculas = this.peliculas.filter(p => p.id !== id);
-          alert('Película eliminada correctamente');
+          alert('Pelicula eliminada correctamente');
         },
         error: (error) => {
-          console.error('Error al eliminar película:', error);
-          alert('Error al eliminar la película');
+          console.error('Error al eliminar pelicula:', error);
+          alert('Error al eliminar la pelicula');
         }
       });
     }
@@ -95,29 +95,29 @@ export class HomeComponent implements OnInit {
     if (this.authService.isAdmin()) {
       return true; // Admin puede editar todas
     }
-    // Verificar tanto userId como usuarioId para compatibilidad
+
     const currentUserId = this.usuario?.id;
     return pelicula.userId === currentUserId;
   }
 
 
   irADashboardAdmin(): void {
-    console.log('🔍 Botón Dashboard Admin clickeado');
-    console.log('🔍 Usuario actual:', this.usuario);
-    console.log('🔍 Es admin?', this.authService.isAdmin());
+    console.log('Boton Dashboard Admin clickeado');
+    console.log('Usuario actual:', this.usuario);
+    console.log('Es admin?', this.authService.isAdmin());
     
     if (this.authService.isAdmin()) {
-      console.log('✅ Usuario es admin, navegando...');
+      console.log('Usuario es admin, navegando...');
       this.router.navigate(['/admin/dashboard']).then(
         (success) => {
-          console.log('✅ Navegación exitosa:', success);
-          console.log('✅ URL actual:', this.router.url);
+          console.log('Navegacion exitosa:', success);
+          console.log('URL actual:', this.router.url);
         }
       ).catch((error) => {
-        console.error('❌ Error en navegación:', error);
+        console.error('Error en navegacion:', error);
       });
     } else {
-      console.log('❌ Usuario NO es admin');
+      console.log('Usuario NO es admin');
       alert('No tienes permisos de administrador');
     }
   }
@@ -126,14 +126,14 @@ export class HomeComponent implements OnInit {
     if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
       console.log('🚪 Cerrando sesión...');
       
-      // Llamar al método logout del AuthService
+      // Llamar al metodo logout 
       this.authService.logout();
       
       // Redireccionar al login
       this.router.navigate(['/login']).then(() => {
-        console.log('✅ Sesión cerrada correctamente');
+        console.log('Sesión cerrada correctamente');
       }).catch((error) => {
-        console.error('❌ Error al redireccionar:', error);
+        console.error('Error al redireccionar:', error);
       });
     }
   }
